@@ -1,0 +1,64 @@
+spring:
+  profiles:
+    active:
+      - dev
+  jmx: 
+    enabled: false
+  jackson: 
+    time-zone: GMT+8
+    default-property-inclusion: NON_NULL
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  servlet:
+    multipart: 
+      max-file-size: 30MB
+      max-request-size: 40MB
+  aop:
+    auto: true
+    resources:
+      static-locations: file:${upload.filePath},classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+    thymeleaf:
+      cache: false
+      prefix: classpath:/templates/
+      suffix: .html
+      mode: HTML5
+      encoding: UTF-8
+      content-type: text/html; charset=utf-8
+    datasource:
+      url: jdbc:mysql://127.0.0.1:3306/online_reading?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&autoReconnect=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8080
+  compression:
+    enabled: true
+  tomcat.max-threads: 0
+  tomcat.uri-encoding: UTF-8
+  servlet:
+    context-path: /online_reading
+logging:
+  level:
+    com.oudot: DEBUG
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+---
+spring:
+  profiles: dev
+
+upload:
+  filePath:  /usr/local/static/
+  imagePath: /online_reading/
+
+---
+  spring:
+  profiles: test
+upload:
+  filePath:  G:\turing\项目\客服\reading\src\main\resources\static\
+  imagePath: /online_reading/
+  
