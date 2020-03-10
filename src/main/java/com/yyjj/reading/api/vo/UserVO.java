@@ -1,5 +1,7 @@
 package com.yyjj.reading.api.vo;
 
+import com.yyjj.reading.db.model.User;
+import com.yyjj.reading.service.bo.UserBO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +24,7 @@ public class UserVO implements Serializable {
     private static final long serialVersionUID = 1L;
     
      
-    public static UserVO newInstance(User  user) {
+    public static UserVO newInstance(User user) {
         if(Objects.isNull( user)) {
   	    return null;
   	  }        
@@ -31,7 +33,7 @@ public class UserVO implements Serializable {
         return  userVO;
   	}
     
-    public static UserVO newInstance(UserBO  user) {
+    public static UserVO newInstance(UserBO user) {
         if(Objects.isNull( user)) {
   	    return null;
   	  }        

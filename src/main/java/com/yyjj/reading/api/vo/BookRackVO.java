@@ -1,5 +1,7 @@
 package com.yyjj.reading.api.vo;
 
+import com.yyjj.reading.db.model.BookRack;
+import com.yyjj.reading.service.bo.BookRackBO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +24,7 @@ public class BookRackVO implements Serializable {
     private static final long serialVersionUID = 1L;
     
      
-    public static BookRackVO newInstance(BookRack  bookrack) {
+    public static BookRackVO newInstance(BookRack bookrack) {
         if(Objects.isNull( bookrack)) {
   	    return null;
   	  }        
@@ -31,7 +33,7 @@ public class BookRackVO implements Serializable {
         return  bookrackVO;
   	}
     
-    public static BookRackVO newInstance(BookRackBO  bookrack) {
+    public static BookRackVO newInstance(BookRackBO bookrack) {
         if(Objects.isNull( bookrack)) {
   	    return null;
   	  }        

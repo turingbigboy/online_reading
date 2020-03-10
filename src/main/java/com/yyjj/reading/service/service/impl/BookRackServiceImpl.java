@@ -1,9 +1,9 @@
 package com.yyjj.reading.service.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.oudot.asset.manage.db.dao.model.BookRackMapper;
-import com.oudot.asset.manage.service.model.BookRackService;
+import com.yyjj.reading.db.dao.BookRackMapper;
 import com.yyjj.reading.db.model.BookRack;
+import com.yyjj.reading.service.service.BookRackService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class BookRackServiceImpl extends ServiceImpl<BookRackMapper, BookRack> 
+public class BookRackServiceImpl extends ServiceImpl<BookRackMapper, BookRack>
 implements BookRackService
 {
 	

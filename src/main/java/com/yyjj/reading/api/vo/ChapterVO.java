@@ -1,5 +1,7 @@
 package com.yyjj.reading.api.vo;
 
+import com.yyjj.reading.db.model.Chapter;
+import com.yyjj.reading.service.bo.ChapterBO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +24,7 @@ public class ChapterVO implements Serializable {
     private static final long serialVersionUID = 1L;
     
      
-    public static ChapterVO newInstance(Chapter  chapter) {
+    public static ChapterVO newInstance(Chapter chapter) {
         if(Objects.isNull( chapter)) {
   	    return null;
   	  }        
@@ -31,7 +33,7 @@ public class ChapterVO implements Serializable {
         return  chapterVO;
   	}
     
-    public static ChapterVO newInstance(ChapterBO  chapter) {
+    public static ChapterVO newInstance(ChapterBO chapter) {
         if(Objects.isNull( chapter)) {
   	    return null;
   	  }        
