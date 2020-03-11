@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  */
 @Aspect
 @Component
-public class BasePageAspect {
+public class  BasePageAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(BasePageAspect.class);
 

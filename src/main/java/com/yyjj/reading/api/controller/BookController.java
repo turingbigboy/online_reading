@@ -1,7 +1,9 @@
 package com.yyjj.reading.api.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yyjj.reading.api.vo.BookVO;
 import com.yyjj.reading.db.model.Book;
+import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.service.BasePage;
 import com.yyjj.reading.service.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +27,13 @@ public class BookController {
 	BookService bookService;
 	
 	/**
-	 * ${controllerName}
+	 * 获取所有书籍
 	 * @param vo
 	 * @return
 	 */
 	@GetMapping
-	public BasePage<BookVO> listBasePage(BookVO vo){
-		return null;
+	public AjaxResult listBasePage(BookVO vo){
+		return AjaxResult.success("",bookService.listPage(new QueryWrapper<Book>(vo.convert())).converterAll(this::convert));
 	}
 	
 	/**
@@ -40,7 +42,7 @@ public class BookController {
 	 * @return
 	 */
 	@GetMapping("/{id:\\d+}")
-	public BookVO Detail(@PathVariable Integer id) {
+	public AjaxResult Detail(@PathVariable Integer id) {
 		
 		return null;
 	}
@@ -53,7 +55,7 @@ public class BookController {
 	 * 
 	 */
 	@PostMapping
-	public BookVO add(@RequestBody @Validated BookVO vo) {
+	public AjaxResult add(@RequestBody @Validated BookVO vo) {
 		return null;	
 	}
 	
@@ -64,7 +66,7 @@ public class BookController {
 	 * 
 	 */
 	@PutMapping
-	public BookVO modify(@RequestBody @Validated BookVO vo) {
+	public AjaxResult modify(@RequestBody @Validated BookVO vo) {
 		return null;	
 	}
 	
@@ -73,8 +75,8 @@ public class BookController {
 	 * @param id
 	 */
 	@DeleteMapping("/{id:\\d+}")
-	public void remove(@PathVariable Integer id) {
-		
+	public AjaxResult remove(@PathVariable Integer id) {
+		return null;
 	}
 	
 	private BasePage<BookVO> convert(BasePage<Book> basePage) {

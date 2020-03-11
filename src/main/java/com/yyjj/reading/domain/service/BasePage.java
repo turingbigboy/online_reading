@@ -6,10 +6,18 @@ import java.util.stream.Collectors;
 
 public class BasePage<T> extends BasePageVO {
 
+	/**
+	 *
+	 */
 	private Long current;
-
+	/**
+	 * 总条数
+	 */
 	private Long total;
 
+	/**
+	 * 数据
+	 */
 	private List<T> records;
 
 	public BasePage() {

@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -22,7 +23,54 @@ import java.util.Objects;
 public class BookVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
+	/**
+	 * 书籍id
+	 */
+	private Integer id;
+
+	/**
+	 * 书籍名称
+	 */
+	private String name;
+
+	/**
+	 * 作者
+	 */
+	private String author;
+	/**
+	 * 出版社
+	 */
+	private String publishingHouse;
+
+	/**
+	 * 出版时间
+	 */
+	private LocalDateTime publicationTime;
+
+	/**
+	 * 简介
+	 */
+	private String synopsis;
+
+	/**
+	 * 字数
+	 */
+	private Integer numberWorders;
+
+	/**
+	 * 封面
+	 */
+	private String cover;
+
+	/**
+	 * 书籍状态
+	 */
+	private Integer status;
+	/**
+	 * 创建时间
+	 */
+	private LocalDateTime createTime;
      
     public static BookVO newInstance(Book book) {
         if(Objects.isNull( book)) {

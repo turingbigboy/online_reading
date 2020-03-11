@@ -3,14 +3,28 @@ package com.yyjj.reading.domain.service;
 import java.util.LinkedList;
 import java.util.Objects;
 
+/**
+ * 分页参数
+ */
 public class BasePageVO {
 
+    /**
+     * 当前页码
+     */
     private Long page;
-    
+
+    /**
+     * 每页行数
+     */
     private Long pageSize;
-    
+    /**
+     * 复合排序
+     */
     private LinkedList<OrderItems> orders;//排序
-    
+
+    /**
+     * 正序OR倒序
+     */
     private Boolean asc ;
     public BasePageVO() { }
     

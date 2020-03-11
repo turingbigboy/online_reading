@@ -1,16 +1,16 @@
 package com.yyjj.reading.domain.context;
 
-import java.util.HashMap;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+
+import java.util.HashMap;
 
 /**
  * 操作消息提醒
  * 
  * @author wowx
  */
-public class AjaxResult extends HashMap<String, Object>
+public  class AjaxResult<T>  extends HashMap<String, Object>
 {
     private static final long serialVersionUID = 1L;
 
@@ -48,7 +48,7 @@ public class AjaxResult extends HashMap<String, Object>
         }
     }
 
-    /** 状态类型 */
+    /** 状态类型  0=成功   301=警告  500=错误  403=失败 */
     private Type type;
 
     /** 状态码 */
@@ -248,7 +248,7 @@ public class AjaxResult extends HashMap<String, Object>
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
             .append("code", getCode())
             .append("msg", getMsg())
             .append("data", getData())
