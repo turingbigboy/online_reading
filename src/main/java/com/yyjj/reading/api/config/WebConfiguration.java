@@ -6,12 +6,14 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.*;
 
+import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -23,6 +25,9 @@ import java.util.List;
  */
 @Configuration
 public class WebConfiguration extends WebMvcConfigurationSupport {
+
+	@Value("${upload.filePath}")
+	String filePath;
 
 	// 添加视图映射
 	@Override
@@ -84,7 +89,7 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		// 重写这个方法，映射静态资源文件
-//	    registry.addResourceHandler("/image/**").addResourceLocations("file:C:\\Users\\Administrator\\Documents\\workspace-spring-tool-suite-4-4.0.1.RELEASE\\repast\\src\\main\\resources\\static\\img\\adv\\");
+	    registry.addResourceHandler("/cover/**").addResourceLocations("file:"+filePath+ File.separator+"cover");
 	    registry.addResourceHandler("/**")
 				.addResourceLocations("classpath:/resources/")
 				.addResourceLocations("classpath:/static/")

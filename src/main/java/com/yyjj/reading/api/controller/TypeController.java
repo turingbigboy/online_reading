@@ -1,8 +1,12 @@
 package com.yyjj.reading.api.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yyjj.reading.api.vo.TypeVO;
+import com.yyjj.reading.db.model.BookType;
 import com.yyjj.reading.db.model.Type;
+import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.service.BasePage;
+import com.yyjj.reading.service.service.BookTypeService;
 import com.yyjj.reading.service.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -10,71 +14,99 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
- * Type
+ * 书籍分类接口
  * @author yml
  *
  */
 @RestController
-@RequestMapping("/Type")
+@RequestMapping("/type")
 public class TypeController {
 		
 	@Autowired
 	TypeService typeService;
-	
+
+	@Autowired
+	BookTypeService bookTypeService;
 	/**
-	 * ${controllerName}
+	 * 获取所有的分类
 	 * @param vo
 	 * @return
 	 */
 	@GetMapping
-	public BasePage<TypeVO> listBasePage(TypeVO vo){
-		return null;
+	public AjaxResult<TypeVO> listBasePage(TypeVO vo){
+		return AjaxResult.success("",typeService.listPage(new QueryWrapper<Type>(vo.convert())).converterAll(this::convert));
 	}
 	
 	/**
-	 *${controllerName}
+	 *获取指定分类
 	 * @param id Typeid
 	 * @return
 	 */
 	@GetMapping("/{id:\\d+}")
-	public TypeVO Detail(@PathVariable Integer id) {
-		
-		return null;
+	public AjaxResult<TypeVO> Detail(@PathVariable Integer id) {
+		return AjaxResult.success("",TypeVO.newInstance(typeService.getById(id)));
 	}
 	
 	
 	/**
-	 * Type
+	 * 新增分类
 	 * @param vo
 	 * @return
 	 * 
 	 */
 	@PostMapping
-	public TypeVO add(@RequestBody @Validated TypeVO vo) {
-		return null;	
+	public AjaxResult<TypeVO> add(@RequestBody @Validated TypeVO vo) {
+		Type t = typeService.lambdaQuery().eq(Type::getTypeName,vo.getTypeName()).one();
+		if(Objects.nonNull(t)){
+			return AjaxResult.failed("该分类已存在");
+		}
+		Type type = vo.convert();
+		Boolean result = typeService.save(type);
+		if(result){
+			return AjaxResult.success("添加成功",typeService.getById(type.getId()));
+		}else {
+			return AjaxResult.failed("添加失败");
+		}
 	}
 	
 	/**
-	 * Type
+	 * 修改分类
 	 * @param vo
 	 * @return
 	 * 
 	 */
 	@PutMapping
-	public TypeVO modify(@RequestBody @Validated TypeVO vo) {
-		return null;	
+	public AjaxResult<TypeVO> modify(@RequestBody @Validated TypeVO vo) {
+		Type t = typeService.lambdaQuery().eq(Type::getTypeName,vo.getTypeName()).one();
+		if(Objects.nonNull(t)){
+			return AjaxResult.success("名称重复，无法修改");
+		}
+		Type type = vo.convert();
+		Boolean result = typeService.updateById(vo.convert());
+		if(result){
+			return AjaxResult.success("修改成功",typeService.getById(type.getId()));
+		}else {
+			return AjaxResult.failed("修改失败");
+		}
 	}
 	
 	/**
-	 * Type
+	 * 删除分类
 	 * @param id
 	 */
 	@DeleteMapping("/{id:\\d+}")
-	public void remove(@PathVariable Integer id) {
-		
+	public AjaxResult remove(@PathVariable Integer id) {
+		bookTypeService.remove(new QueryWrapper<BookType>().lambda().eq(BookType::getTypeId,id));
+		Boolean result = typeService.removeById(id);
+		if(result){
+			return AjaxResult.success("删除成功");
+		}else {
+			return AjaxResult.failed("删除失败");
+		}
 	}
 	
 	private BasePage<TypeVO> convert(BasePage<Type> basePage) {

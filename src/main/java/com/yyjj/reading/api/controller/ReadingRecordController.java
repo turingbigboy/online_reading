@@ -1,11 +1,12 @@
 package com.yyjj.reading.api.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yyjj.reading.api.vo.ReadingRecordVO;
 import com.yyjj.reading.db.model.ReadingRecord;
+import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.service.BasePage;
 import com.yyjj.reading.service.service.ReadingRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 
 
 /**
- * ReadingRecord
+ * 阅读记录
  * @author yml
  *
  */
@@ -25,63 +26,37 @@ public class ReadingRecordController {
 	ReadingRecordService readingrecordService;
 	
 	/**
-	 * ${controllerName}
+	 * 用户所有阅读记录
 	 * @param vo
 	 * @return
 	 */
-	@GetMapping
-	public BasePage<ReadingRecordVO> listBasePage(ReadingRecordVO vo){
+	@GetMapping("{userId:\\d+}")
+	public BasePage<ReadingRecordVO> listBasePage(@PathVariable Integer userId, ReadingRecordVO vo){
+		readingrecordService.listPage(new QueryWrapper<ReadingRecord>().lambda().eq(ReadingRecord::getUserId,userId)).converterAll(this::convert);
 		return null;
 	}
-	
+
 	/**
-	 *${controllerName}
-	 * @param id ReadingRecordid
-	 * @return
-	 */
-	@GetMapping("/{id:\\d+}")
-	public ReadingRecordVO Detail(@PathVariable Integer id) {
-		
-		return null;
-	}
-	
-	
-	/**
-	 * ReadingRecord
-	 * @param vo
-	 * @return
-	 * 
-	 */
-	@PostMapping
-	public ReadingRecordVO add(@RequestBody @Validated ReadingRecordVO vo) {
-		return null;	
-	}
-	
-	/**
-	 * ReadingRecord
-	 * @param vo
-	 * @return
-	 * 
-	 */
-	@PutMapping
-	public ReadingRecordVO modify(@RequestBody @Validated ReadingRecordVO vo) {
-		return null;	
-	}
-	
-	/**
-	 * ReadingRecord
+	 * 删除一条阅读记录
 	 * @param id
 	 */
 	@DeleteMapping("/{id:\\d+}")
-	public void remove(@PathVariable Integer id) {
-		
+	public AjaxResult remove(@PathVariable Integer id) {
+
+		Boolean result = readingrecordService.removeById(id);
+		if(result){
+			return AjaxResult.success("删除成功");
+		}else {
+			return AjaxResult.failed("删除失败");
+		}
 	}
 	
 	private BasePage<ReadingRecordVO> convert(BasePage<ReadingRecord> basePage) {
 		List<ReadingRecordVO> resultList = new ArrayList<ReadingRecordVO>();
 					
 		for (ReadingRecord readingrecord : basePage.getRecords()) {
-			resultList.add(ReadingRecordVO.newInstance(readingrecord));
+			ReadingRecordVO vo = ReadingRecordVO.newInstance(readingrecord);
+			resultList.add(vo);
 		}
 		BasePage<ReadingRecordVO> result = new BasePage<ReadingRecordVO>(basePage.getPage(),
 				basePage.getPageSize(), basePage.getCurrent(), basePage.getTotal(), resultList);

@@ -44,7 +44,10 @@ public class Chapter implements Serializable {
      * 章节内容
      */
     private String content;
-
+    /**
+     * 章节标题
+     */
+    private String title;
     /**
      * 创建时间
      */
@@ -92,6 +95,15 @@ public class Chapter implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public LocalDateTime getCreateTime() {
         return createTime;
     }
@@ -109,7 +121,7 @@ public class Chapter implements Serializable {
             ", numberWorders=" + numberWorders +
             ", sort=" + sort +
             ", content=" + content +
-            ", createTime=" + createTime +
+            ", createTime=" + createTime + ", title=" + title +
         "}";
     }
 }

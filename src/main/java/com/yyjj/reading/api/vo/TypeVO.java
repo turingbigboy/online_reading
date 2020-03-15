@@ -22,7 +22,15 @@ import java.util.Objects;
 public class TypeVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+	/**
+	 * 类型id
+	 */
+	private Integer id;
+
+	/**
+	 * 类型名称
+	 */
+	private String typeName;
      
     public static TypeVO newInstance(Type type) {
         if(Objects.isNull( type)) {

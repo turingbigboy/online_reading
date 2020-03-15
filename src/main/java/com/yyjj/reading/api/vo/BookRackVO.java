@@ -22,8 +22,26 @@ import java.util.Objects;
 public class BookRackVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-     
+
+	/**
+	 * 书架id
+	 */
+	private Integer id;
+
+	/**
+	 * 用户id
+	 */
+	private Integer userId;
+
+	/**
+	 * 书籍id
+	 */
+	private Integer bookId;
+
+	/**
+	 * 书籍
+	 */
+	private BookVO book;
     public static BookRackVO newInstance(BookRack bookrack) {
         if(Objects.isNull( bookrack)) {
   	    return null;

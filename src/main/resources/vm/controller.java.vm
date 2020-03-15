@@ -1,4 +1,4 @@
-package com.oudot.asset.manage.api.controller.resource;
+package com.yyjj.reading.api.controller;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping("/${model}")
+@RequestMapping("/${lowerModel}")
 public class ${model}Controller {
 		
 	@Autowired
@@ -35,7 +35,7 @@ public class ${model}Controller {
 	 * @return
 	 */
 	@GetMapping
-	public BasePage<${model}VO> listBasePage(${model}VO vo){
+	public AjaxResult<${model}VO> listBasePage(${model}VO vo){
 		return null;
 	}
 	
@@ -45,7 +45,7 @@ public class ${model}Controller {
 	 * @return
 	 */
 	@GetMapping("/{id:\\d+}")
-	public ${model}VO Detail(@PathVariable Integer id) {
+	public AjaxResult<${model}VO> Detail(@PathVariable Integer id) {
 		
 		return null;
 	}
@@ -58,7 +58,7 @@ public class ${model}Controller {
 	 * 
 	 */
 	@PostMapping
-	public ${model}VO add(@RequestBody @Validated ${model}VO vo) {
+	public AjaxResult<${model}VO> add(@RequestBody @Validated ${model}VO vo) {
 		return null;	
 	}
 	
@@ -69,7 +69,7 @@ public class ${model}Controller {
 	 * 
 	 */
 	@PutMapping
-	public ${model}VO modify(@RequestBody @Validated ${model}VO vo) {
+	public AjaxResult<${model}VO> modify(@RequestBody @Validated ${model}VO vo) {
 		return null;	
 	}
 	
@@ -78,20 +78,24 @@ public class ${model}Controller {
 	 * @param id
 	 */
 	@DeleteMapping("/{id:\\d+}")
-	public void remove(@PathVariable Integer id) {
-		
+	public AjaxResult remove(@PathVariable Integer id) {
+		return null;
 	}
 	
 	private BasePage<${model}VO> convert(BasePage<${model}> basePage) {
 		List<${model}VO> resultList = new ArrayList<${model}VO>();
 					
 		for (${model} ${lowerModel} : basePage.getRecords()) {
-			resultList.add(${model}VO.newInstance(${lowerModel}));
+			resultList.add(convert(${lowerModel}));
 		}
 		BasePage<${model}VO> result = new BasePage<${model}VO>(basePage.getPage(),
 				basePage.getPageSize(), basePage.getCurrent(), basePage.getTotal(), resultList);
 		return result;
-	} 
-	
+	}
+	private ${model}VO convert(${model} ${lowerModel}){
+			${model}VO vo = ${model}VO.newInstance(${lowerModel});
+			//TODO
+			return vo;
+	}
 	
 }

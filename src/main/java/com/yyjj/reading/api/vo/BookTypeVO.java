@@ -1,5 +1,7 @@
 package com.yyjj.reading.api.vo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.yyjj.reading.db.model.BookType;
 import com.yyjj.reading.service.bo.BookTypeBO;
 import lombok.Getter;
@@ -22,8 +24,31 @@ import java.util.Objects;
 public class BookTypeVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-     
+
+	/**
+	 * 书籍类型id
+	 */
+	@TableId(value = "id", type = IdType.AUTO)
+	private Integer id;
+
+	/**
+	 * 书籍id
+	 */
+	private Integer bookId;
+
+	/**
+	 * 书籍
+	 */
+	private BookVO book;
+
+	/**
+	 * 类型
+	 */
+	private TypeVO type;
+	/**
+	 * 类型id
+	 */
+	private Integer typeId;
     public static BookTypeVO newInstance(BookType booktype) {
         if(Objects.isNull( booktype)) {
   	    return null;
