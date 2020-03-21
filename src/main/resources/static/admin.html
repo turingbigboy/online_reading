@@ -129,9 +129,11 @@
       </div>
     </form> -->
     <!--新增书籍 end-->
-    
+
+       <!-- <button class="sub-bindbtn" lay-submit lay-filter="bind" style="display: none;"> -->
   </body>
 <script>
+    var ip = initIP();
       $(function() {
         init();
       });
@@ -139,10 +141,7 @@
         returnZindex();
         initTab();
         initTable()
-        initBookTable();
-        // initUserTable();
       }
-  
         //拼接Book   由於時間控件的問題，這裡必須用拼接組裝js，否則會出现laydate闪现等bug
       function pjBook(){
         var nHtml='<div class="layui-form-item">'
@@ -180,12 +179,54 @@
         nHtml+='</div>'
         return nHtml;
       }
+      function pjUser() {
+          var nHtml = '<div class="layui-form-item" style="display: none">'
+          nHtml+='<label class="layui-form-label">id</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+=' <input type="text" name="id" id="id" autocomplete="off" class="layui-input">'
+          nHtml+=' </div>'
+          nHtml+='</div>'
+          nHtml+='<div class="layui-form-item">'
+          nHtml+='<label class="layui-form-label">用戶名</label>'
+          nHtml+='<div class="layui-input-block">'
+          nHtml+='<input type="text" name="username" id="username"  placeholder="请输入用戶名" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+          nHtml+='<div class="layui-form-item">'
+          nHtml+='<label class="layui-form-label">密码</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+=' <input type="password" name="password" id="password" placeholder="请输入密码" autocomplete="off" class="layui-input">'
+          nHtml+=' </div>'
+          nHtml+='</div>'
+          nHtml+='<div class="layui-form-item">'
+          nHtml+='<label class="layui-form-label">账号</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+='<input type="text" name="account" id="account"  placeholder="请输入账号" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+          nHtml+='<div class="layui-form-item">'
+          nHtml+='<label class="layui-form-label">图片</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+='<input type="text" name="icon" id="icon" placeholder="请输入图片" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+          nHtml+='<div class="layui-form-item">'
+          nHtml+='<label class="layui-form-label">身份证</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+='<input type="number" name="identity" id="identity" placeholder="请输入身份证" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+          return nHtml;
+      }
       function initTable(){
-        axiosGetRequst("book",null).then(data=>{
-          console.log("table",data)
-        })
+          initBookTable();
+          initUserTable();
+
       }
       function initBookTable(Json,Title,thId,tBodyId){
+          axiosGetRequst("book",null).then(data=>{
+              console.log("table",data)
+          })
         //加載數據
         var bookJson=[
                 {name:"密战无痕",author:"长风",publishingHouse:"历史军事",synopsis:"密战无痕的简介",publicationTime:"2020-04-01 00:00:00"},
@@ -222,7 +263,6 @@
           for(let key of Object.keys(item)){
             tBodyHtml+='<td>'+item[key]+'</td>'
           }
-          console.log("tttttt",item)
           var $row = JSON.stringify(item).replace(/\"/g,"'");
           tBodyHtml+='<td><button type="button" class="layui-btn layui-btn-normal float-left mb-1" onclick="updateBook('+$row+')" >修改</button>'
           tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="uploadChapter('+$row+')">新增章节</button>'
@@ -231,7 +271,79 @@
         }
         $("#tBodyId").html(tBodyHtml)
       }
-     
+      function initUserTable() {
+          let getUser = {
+              url:ip+"user",
+              method:"",
+              param:{}
+          }
+          axios(getUser).then(data=>{
+              console.log("用户数据",data)
+              console.log("分页后数据",data.data.data.records);
+              let usrtJson = data.data.data.records;
+              //有数据才将表格显示出来
+              if(usrtJson){
+                  drawUser(usrtJson);
+              }
+          })
+
+
+      }
+      function drawUser(data) {
+          let userJson = data
+          if(userJson){
+              var keys = Object.keys(userJson[0]);
+              console.log(keys)
+          }
+          let userTitle = [
+              {name:'id',key:'id'},
+              {name:'用户名',key:'username'},
+              {name:'密码',key:'password'},
+              {name:'账号',key:'account'},
+              {name:'图片',key:'icon'},
+              {name:"身份",key:'identity'}
+          ]
+          let thHtml="";
+          let tBodyHtml ="";
+          for(let title of userTitle){
+              thHtml+='<th>'+title.name+'</th>'
+          }
+          thHtml+='<th style="width:280px">操作</th>'
+          $("#uThId").html(thHtml);
+          for(let item of userJson){
+              tBodyHtml+='<tr>'
+              for(let key of Object.keys(item)){
+                  tBodyHtml+='<td>'+item[key]+'</td>'
+              }
+              var $row = JSON.stringify(item).replace(/\"/g,"'");
+              tBodyHtml+='<td><button type="button" class="layui-btn layui-btn-normal float-left mb-1" onclick="updateUser('+$row+')" >修改</button>'
+              tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteUser('+$row+')">刪除</button></td>'
+              tBodyHtml+='</tr>'
+          }
+          $("#uTBodyId").html(tBodyHtml)
+      }
+      function updateUser(row) {
+          console.log(row)
+          let html = pjUser();
+          alertcomfirm2("updateUserLayer","修改用户",html,"updateUserVerify",null,validateAddUser,ajaxUpdateUser,row,getUserData)
+      }
+      function ajaxUpdateBook(form) {
+          //TODO 更新书籍
+      }
+      function ajaxUpdateUser(form) {
+          form.name = form.username;
+          let updateUser={
+              url:ip+"user/register",
+              method:"POST",
+              data:form
+          }
+          axios(updateUser).then(()=>{
+              alertLayer("编辑用户","修改成功",closeForm);
+      }).catch(err=>{alertLayer2("编辑用户",err)})
+      }
+      function deleteUser(row) {
+          console.log(row)
+      }
       function uploadBook(){
         let rowList = {
           name: "",
@@ -240,21 +352,26 @@
           synopsis: ""
         }
         let html = pjBook();
-        console.log("uploadBook")
-        alertcomfirm2("addBookLayer","添加书籍",html,"addBookVerify",'#publicationTime',validateAddBook,ajaxAddBook,rowList)
+        alertcomfirm2("addBookLayer","添加书籍",html,"addBookVerify",'#publicationTime',validateAddBook,ajaxAddBook,rowList,getFormData)
       }
       function uploadChapter(){
         
       }
       function updateBook(rowList){
-        console.log(typeof rowList.publicationTime)
-        console.log(rowList)
         let html = pjBook();
-        alertcomfirm2("addBookLayer","修改书籍",html,"updateBookVerify",'#publicationTime',validateUpdateBook,ajaxUpdateBook,rowList)
+        alertcomfirm2("addBookLayer","修改书籍",html,"updateBookVerify",'#publicationTime',validateAddBook,ajaxUpdateBook,rowList,getFormData)
+      }
+      function getUserData(rowList) {
+          document.getElementById("id").value=rowList.id;
+          document.getElementById("username").value=rowList.name;
+          document.getElementById("password").value=rowList.password;
+          document.getElementById("account").value=rowList.account;
+          document.getElementById("icon").value=rowList.icon;
+          document.getElementById("identity").value=rowList.identity;
+
       }
       //渲染後設置值獲取數據(修改的數據打開在這裡賦值)
       function getFormData(rowList){
-        console.log("getFormData")
         document.getElementById("name").value=rowList.name;
         document.getElementById("author").value=rowList.author;
         document.getElementById("publishingHouse").value=rowList.publishingHouse;
@@ -265,8 +382,6 @@
         console.log(rowList)
         quesForm("你確定要刪除嗎？",deleteBookAjax)
       }
-      
-      function validateUpdateBook(){}
       function validateAddBook(form){
               var form = layui.form;
               form.verify({
@@ -285,7 +400,49 @@
       function ajaxAddBook(data){
         console.log(data)
         //如果成功，將status寫入session
-        //TODO ajax请求添加书籍
+          let addBook={
+            url:ip+"book",
+            method:"POST",
+            data:data
+          }
+          axios.post(addBook).then(res=>{
+              console.log("新增",res)
+          }).catch(err=>{console.log(err)})
+      }
+      function  addUser() {
+          let rowList = {
+              name: "",
+              author: "",
+              publishingHouse: "",
+              synopsis: ""
+          }
+          let html = pjUser();
+          alertcomfirm2("addUserLayer","添加用户",html,"addUserVerify",null,validateAddUser,ajaxAddUser,rowList,getUserData)
+      }
+    function validateAddUser(form) {
+            var form = layui.form;
+            form.verify({
+                identity:function (value) {
+                    if(typeof value !== "number"){
+                        return "身份必须是数字"
+                    }
+                }
+            });
+    }
+      function ajaxAddUser(form) {
+          console.log(form)
+          let addUser = {
+              url:ip+"user/register",
+              method:"POST",
+              data:form
+          }
+          axios(addUser).then(()=>{
+              alertLayer("编辑用户","新增成功",closeForm);
+          }).catch(err=>{alertLayer2("编辑用户",err)})
+      }
+      function closeForm() {
+          layer.closeAll();
+          init();
       }
       function deleteBookAjax(){
         //TODO  ajax刪除

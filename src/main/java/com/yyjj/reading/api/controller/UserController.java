@@ -36,6 +36,7 @@ public class UserController {
 	 */
 	@GetMapping
 	public AjaxResult<BasePage<UserVO>> listBasePage(UserVO vo){
+		System.out.println("3");
 		return AjaxResult.success("",userService.listPage(new QueryWrapper<User>(vo.convert())).converterAll(this::convert));
 	}
 

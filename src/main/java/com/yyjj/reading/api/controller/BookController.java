@@ -47,6 +47,7 @@ public class BookController {
 	 */
 	@GetMapping
 	public AjaxResult listBasePage(BookVO vo){
+
 		return AjaxResult.success("",bookService.listPage(new QueryWrapper<Book>(vo.convert())).converterAll(this::convert));
 	}
 	

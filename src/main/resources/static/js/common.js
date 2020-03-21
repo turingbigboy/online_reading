@@ -1,5 +1,27 @@
+function alertLayer(title,content,callback){
+    layer.open({
+        title: title
+        ,content: content
+        ,btn: ['确定', '取消']
+        ,yes: function(index, layero){
+            callback()
+        },
+    });
 
-    function alertForm(title,id,callback){
+}
+//无关闭
+function alertLayer2(title,content){
+    layer.open({
+        title: title
+        ,content: content
+
+    });
+
+}
+
+
+
+function alertForm(title,id,callback){
         layer.open({
             title:title,
             content: $(id).html()
@@ -73,8 +95,10 @@
       })
     })
   }
+
+
      //彈出窗口模板2  带时间laydate的弹窗  html位js拼接的数据
-     function alertcomfirm2(id,title,html,layFilter,laydateId,validateMethod,ajaxMethod,data){
+     function alertcomfirm2(id,title,html,layFilter,laydateId,validateMethod,ajaxMethod,data,renderForm){
       layui.use(['form','layer','laydate'], function(){
         var form = layui.form;
         var laydate = layui.laydate;
@@ -100,16 +124,20 @@
           'lay-submit': ''
           });
         //重新渲染form
-        returnParentFormData(data);
+        // returnParentFormData(data);
+        //渲染数据（修改）
+        renderForm(data)
         form.render();
-        laydate.render({ 
-          elem: laydateId,
-          type: 'datetime',
-          trigger:'click',
-          format:'yyyy-MM-dd HH:mm:ss',
-          value:data.publicationTime
-          // ,range: true //或 range: '~' 来自定义分割字符
-        });
+        if(laydateId!=null&&laydateId!=""){
+            laydate.render({
+                elem: laydateId,
+                type: 'datetime',
+                trigger:'click',
+                format:'yyyy-MM-dd HH:mm:ss',
+                value:data.publicationTime
+                // ,range: true //或 range: '~' 来自定义分割字符
+            });
+        }
           // parentListen();
         },
         
@@ -133,15 +161,14 @@
     function returnParentListen(){
       parent.returnZindex();
     }
-    function returnParentFormData(data){
-      parent.getFormData(data);
+
+
+
+
+    function initIP(){
+        const ip = "http://localhost:8080/online_reading/"
+        return ip;
     }
-    
-
-
-
-
-
     
 //axios封装post请求
 function axiosPostRequst(url,data) {
