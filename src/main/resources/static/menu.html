@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>菜单</title>
+    <link rel="stylesheet" href="./css/layui.css">  
+    <link rel="stylesheet" href="./css/common.css">  
+    <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="./layui/layui/dist/layui.all.js"></script>
+    <script type="text/javascript" src="./js/common.js"></script>
+</head>
+<body class="contenttext">
+
+  <iframe id="frame-content" name="myFrame" MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no src="./layout.html" width="100%"  height="600px"></iframe> 
+  <div class="main" id="main">
+    <div class="menu-left">
+      <ul class="layui-nav layui-nav-tree layui-nav-side" id="lay-tree" lay-filter="test">
+        </ul>
+    </div>
+   
+    <div class="main2" >
+      <div class="inner">
+        <div class=" overflow">
+          <div id="book">
+            <!-- <div class="oneEle">
+              <img src="./image/1.jpg" class="img ib mr-1">
+              <div class="ib">
+                <div class="title mb-1">临渊行</div>
+                <div class="author mb-1">宅猪</div>
+                <div >苏云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人。
+                  　　他更没有想到天门镇外，
+                </div>
+              </div>
+            </div> -->
+          </div>
+      
+        </div>
+        </div>
+       
+          
+        
+
+      </div>
+  
+    </div>
+  </div>
+   
+      
+
+
+
+
+  </div>
+
+
+
+
+
+
+   
+  </body>
+<script>
+      $(function() {
+        init();
+        
+      });
+      function init(){
+        returnZindex();
+        initTree();
+        //TODO  初始化要选中changeContent一个显示信息
+      }
+      function returnZindex(){
+        let dom = document.getElementById("main")
+        dom.style.zIndex = 0;
+      }
+      function initTree(){
+        let menu = [
+          {"menuName":"玄幻"},
+          {"menuName":"言情"},
+          {"menuName":"科幻"},
+          {"menuName":"重生"},
+          {"menuName":"历史"}
+        ]
+        var nHtml = "";
+        menu.forEach(item=>{
+          nHtml+= '<li class="layui-nav-item layui-nav-itemed"><a onclick=changeContent("'+item.menuName+'")>'+item.menuName+'</a></li>'
+        })
+        $("#lay-tree").html(nHtml)
+        
+      }
+      //点击树
+      function changeContent(category){
+        let book = document.getElementById("book");
+        let booksJson=[
+          {bookId:"1",bookName:"临渊行",img:"./image/1.jpg",auth:"宅猪",desc:"云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人云怎么也没有想到云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人云怎么也没有想到云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人云怎么也没有想到云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人云怎么也没有想到云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人云怎么也没有想到"},
+          {bookId:"3",bookName:"临渊行",img:"./image/3.jpg",auth:"宅猪",desc:"云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人云怎么也没有想到，"},
+          {bookId:"4",bookName:"临渊行",img:"./image/4.jpg",auth:"宅猪",desc:"云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人"},
+          {bookId:"5",bookName:"临渊行",img:"./image/5.jpg",auth:"宅猪",desc:"云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人"},
+          {bookId:"6",bookName:"临渊行",img:"./image/6.jpg",auth:"宅猪",desc:"云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人"},
+          {bookId:"7",bookName:"临渊行",img:"./image/7.jpg",auth:"宅猪",desc:"云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人"},
+          {bookId:"8",bookName:"临渊行",img:"./image/8.jpg",auth:"宅猪",desc:"云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人"},
+          {bookId:"9",bookName:"临渊行",img:"./image/1.jpg",auth:"宅猪",desc:"云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人"},
+          {bookId:"10",bookName:"临渊行",img:"./image/1.jpg",auth:"宅猪",desc:"云怎么也没有想到，自己生活了十几年的天门镇，只有自己是人"},
+        ]
+        let nHtml = "";
+        booksJson.forEach(item=>{
+          let itemDesc = item.desc
+          nHtml+='<div class="oneEle"><img src="'+item.img+'" class="img ib mr-1 menuBook cursor" onlick=toBook("'+item.bookId+'")>'
+          nHtml+='<div class="ib bookInfo">'
+          nHtml+='<div class="title mb-1">'+item.bookName+'</div>'
+          nHtml+='<div class="author mb-1">'+item.auth+'</div>'
+          if(item.desc.length>70){
+            itemDesc = itemDesc.substring(0,70)+"...";
+            nHtml+='<div class="author mb-1">'+itemDesc+'<a class="cursor" onclick=toBook("'+item.bookId+'")>更多</a></div>'
+          }else{
+            nHtml+='<div class="author mb-1">'+itemDesc+'</div>'
+          }
+          nHtml+='</div></div>'
+          $("#book").html(nHtml)
+        })
+      }
+      function toBook(id){
+        //TODO ajax根据bookid请求数据，获取书籍的信息 并跳转到clickBook页面,在这个页面根据id获取book信息，然后将json初始化
+        let ip = getChildIp();
+        // window.location.href = ip+'clickBook.html'
+        document.location.href("ip+'clickBook.html'?id="+id); 
+      }
+      function getChildIp(){
+        const ip = myFrame.window.initIP();
+        console.log("ip"+ip)
+        return ip;
+      }
+
+     
+     
+     
+   
+     
+    
+</script>
+<style>
+ 
+.main{
+  position:absolute;
+  top: 60px;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  
+}
+.main2{
+  top: 0px; /*不能去掉*/
+  left: 200px;
+  position:absolute;
+  width: calc(100%  - 200px);
+}
+.overflow{
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 600px;
+  position: relative;
+  width: 100%;
+}
+.inner{
+  height: 100%;
+  width: 100%;
+}
+.layui-nav-side{
+  position: absolute;
+}
+.menu-left{
+  height: 100%;
+  width: 20%;
+  display: inline-block;
+}
+.oneEle{
+  left: 5%;
+  position: relative;
+  top: 20px;
+  margin-bottom: 30px;
+  margin-right: 5%;
+  /* border: 1px solid green; */
+
+}
+.menuBook{
+  width: 200px;
+  height: 250px;
+}
+.bookInfo{
+  width:calc(100%  - 400px);
+  top: 40px;
+  position: relative;
+  /* border: 1px solid red; */
+}
+
+
+</style>
+</html>

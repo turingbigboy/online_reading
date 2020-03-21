@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="./css/layui.css">  
+    <link rel="stylesheet" href="./css/common.css">  
+    <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="./layui/layui/dist/layui.all.js"></script>
+    <script type="text/javascript" src="./layui/layui/dist/lay/modules/element.js"></script>
+    <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/axios.js"></script>
+</head>
+<body>
+   <iframe id="frame-content" MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no src="./layout.html" width="100%"  height="900px"></iframe> 
+    <div class="main" id="main">
+        <div>
+          <div class="layui-tab layui-tab-card" >
+            <ul class="layui-tab-title">
+              <li class="layui-this">用戶管理</li>
+              <li>書籍管理</li>
+            </ul>
+            <!--用戶管理-->
+            <div class="layui-tab-content" id="tabContent">
+              <div class="layui-tab-item layui-show" id="userManager">
+                <button type="button" class="layui-btn float-right mb-1" onclick="addUser()">新增用戶</button>
+                <table class="layui-table">
+                  <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                  </colgroup>
+                  <thead>
+                    <tr id="uThId">
+                    </tr> 
+                  </thead>
+                  <tbody id="uTBodyId">
+                  </tbody>
+                </table>
+                
+              </div>
+            <!--用戶管理 end-->
+            <!--書籍管理-->
+              <div class="layui-tab-item" id="bookManager">
+                <button type="button" class="layui-btn float-right mb-1" onclick="uploadBook()">上傳書籍</button>
+                  <!-- <button type="button" class="layui-btn float-right mb-1 mr-1" onclick="uploadChapter">新增章节</button> -->
+                  <table class="layui-table">
+                      <colgroup>
+                        <col width="150">
+                        <col width="200">
+                        <col>
+                      </colgroup>
+                      <thead>
+                        <tr id="thId">
+                          <!-- <th>書名</th>
+                          <th>作者</th>
+                          <th>上傳時間</th> -->
+                        </tr> 
+                      </thead>
+                      <tbody id="tBodyId">
+                        <!-- <tr id="">
+                          <td>書名1</td>
+                          <td>作者1</td>
+                          <td>上傳時間1</td>
+                        </tr>
+                        <tr>
+                          <td>書名2</td>
+                          <td>作者2</td>
+                          <td>上傳時間2</td>
+                        </tr> -->
+                      </tbody>
+                    </table>
+                  <!-- <table class="tableClass" cellspacing="0" >
+                      <th style="width:90px;" >序號</th>
+                      <th v-for="item in tabletitle">{{item.name}}</th>
+                      <th style="width:90px;" >操作</th>
+                      <tbody >
+                        <tr>
+                        <td>
+                          
+                        </td>
+                        <td v-for="col in tabletitle" :key="col.key" style="width:150px;height:40px;" >
+                         
+                        </td>
+                        <td style="width:90px;height:40px">
+                          <div style="line-height:38px;">
+                            <i style="font-size: 22px;" @click="spliceRow(tabledata,index)" class="el-icon-remove-outline" v-if="row.newFlag"></i>
+                            <el-button  type="text" size="small" @click="deleteRow(tabledata,index)" style="color:red" v-else>刪除</el-button>
+                          </div>
+                        </td>
+                        </tr>
+                      </tbody>
+                    </table> -->
+              </div>
+            <!--書籍管理 end-->
+
+            </div>
+          </div>
+      </div>
+    </div>
+    <!--新增书籍-->
+    <!-- <form class="layui-form" id="addBook" action="" style="display: none;">
+      <div class="layui-form-item">
+        <label class="layui-form-label">书籍名称</label>
+        <div class="layui-input-block">
+          <input type="text" name="name" lay-verify="name" placeholder="请输入书籍名称" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">作者</label>
+        <div class="layui-input-inline">
+          <input type="text" name="author" lay-verify="author" placeholder="请输入作者" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">出版社</label>
+        <div class="layui-input-inline">
+          <input type="text" name="publishingHouse" lay-verify="publishingHouse" placeholder="请输入出版社" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">出版时间</label>
+            <input type="text" class="layui-input" id="publicationTime2" placeholder="yyyy-MM-dd HH:mm:ss">
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">简介</label>
+        <div class="layui-input-inline">
+          <input type="txt" name="synopsis" lay-verify="synopsis" placeholder="请输入简介" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+    </form> -->
+    <!--新增书籍 end-->
+    
+  </body>
+<script>
+      $(function() {
+        init();
+      });
+      function init(){
+        returnZindex();
+        initTab();
+        initTable()
+        initBookTable();
+        // initUserTable();
+      }
+  
+        //拼接Book   由於時間控件的問題，這裡必須用拼接組裝js，否則會出现laydate闪现等bug
+      function pjBook(){
+        var nHtml='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">书籍名称</label>'
+        nHtml+='<div class="layui-input-block">'
+        nHtml+='<input type="text" name="name" id="name" lay-verify="name" placeholder="请输入书籍名称" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">作者</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<input type="text" name="author" id="author" lay-verify="author" placeholder="请输入作者" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+       
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">出版社</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<input type="text" name="publishingHouse" id="publishingHouse" lay-verify="publishingHouse" placeholder="请输入出版社" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">简介</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<input type="text" name="synopsis" id="synopsis" lay-verify="synopsis" placeholder="请输入简介" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+     
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">出版时间</label>'
+        nHtml+='<div class="layui-input-block">'
+        nHtml+=' <input type="text" class="layui-input" name="publicationTime" id="publicationTime" placeholder="yyyy-MM-dd HH:mm:ss">'
+        nHtml+='</div>'
+        return nHtml;
+      }
+      function initTable(){
+        axiosGetRequst("book",null).then(data=>{
+          console.log("table",data)
+        })
+      }
+      function initBookTable(Json,Title,thId,tBodyId){
+        //加載數據
+        var bookJson=[
+                {name:"密战无痕",author:"长风",publishingHouse:"历史军事",synopsis:"密战无痕的简介",publicationTime:"2020-04-01 00:00:00"},
+                {name:"凡尘一剑",author:"剑东来",publishingHouse:"武侠修真",synopsis:"凡尘一剑的简介",publicationTime:"2019-04-28 00:00:00"},
+                {name:"我真的是人生赢家",author:"刘阿懦",publishingHouse:"其他类型",synopsis:"我真的是人生赢家的简介",publicationTime:"2020-04-28 00:00:00"},
+                {name:"次元法典",author:"西贝猫",publishingHouse:"网游动漫",synopsis:"托身白刃里，浪迹红的简介",publicationTime:"2020-04-28 00:00:00"},
+                {name:"托身白刃里，浪迹红",author:"接卡口",publishingHouse:"武侠修真",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
+                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
+                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
+                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
+                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
+                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
+        ]
+        var bookTitle = [
+        {name:'书籍名称',key:'name'},
+        {name:'作者',key:'author'},
+        {name:'出版社',key:'publishingHouse'},
+        {name:'简介',key:'synopsis'},
+        {name:"出版時間",key:'publicationTime'}
+        ]
+        if(bookJson){
+          var keys = Object.keys(bookJson[0]);
+          console.log(keys)
+        }
+        let thHtml="";
+        let tBodyHtml ="";
+        for(let title of bookTitle){
+          thHtml+='<th>'+title.name+'</th>'
+        }
+        thHtml+='<th style="width:280px">操作</th>'
+        $("#thId").html(thHtml);
+        for(let item of bookJson){
+          tBodyHtml+='<tr>'
+          for(let key of Object.keys(item)){
+            tBodyHtml+='<td>'+item[key]+'</td>'
+          }
+          console.log("tttttt",item)
+          var $row = JSON.stringify(item).replace(/\"/g,"'");
+          tBodyHtml+='<td><button type="button" class="layui-btn layui-btn-normal float-left mb-1" onclick="updateBook('+$row+')" >修改</button>'
+          tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="uploadChapter('+$row+')">新增章节</button>'
+          tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteBook('+$row+')">刪除</button></td>'
+          tBodyHtml+='</tr>'
+        }
+        $("#tBodyId").html(tBodyHtml)
+      }
+     
+      function uploadBook(){
+        let rowList = {
+          name: "",
+          author: "",
+          publishingHouse: "",
+          synopsis: ""
+        }
+        let html = pjBook();
+        console.log("uploadBook")
+        alertcomfirm2("addBookLayer","添加书籍",html,"addBookVerify",'#publicationTime',validateAddBook,ajaxAddBook,rowList)
+      }
+      function uploadChapter(){
+        
+      }
+      function updateBook(rowList){
+        console.log(typeof rowList.publicationTime)
+        console.log(rowList)
+        let html = pjBook();
+        alertcomfirm2("addBookLayer","修改书籍",html,"updateBookVerify",'#publicationTime',validateUpdateBook,ajaxUpdateBook,rowList)
+      }
+      //渲染後設置值獲取數據(修改的數據打開在這裡賦值)
+      function getFormData(rowList){
+        console.log("getFormData")
+        document.getElementById("name").value=rowList.name;
+        document.getElementById("author").value=rowList.author;
+        document.getElementById("publishingHouse").value=rowList.publishingHouse;
+        document.getElementById("synopsis").value=rowList.synopsis;
+        // document.getElementById("publicationTime").value=rowList.publicationTime;
+      }
+      function deleteBook(rowList){
+        console.log(rowList)
+        quesForm("你確定要刪除嗎？",deleteBookAjax)
+      }
+      
+      function validateUpdateBook(){}
+      function validateAddBook(form){
+              var form = layui.form;
+              form.verify({
+                    lusername:function(value){
+                      if(value.length==0){
+                         return '用戶名不能爲空'
+                       }
+                    },
+                    lpassword: function(value) {
+                       if(value.length==0){
+                         return '密碼不能爲空'
+                    }
+                  }
+                });
+      }
+      function ajaxAddBook(data){
+        console.log(data)
+        //如果成功，將status寫入session
+        //TODO ajax请求添加书籍
+      }
+      function deleteBookAjax(){
+        //TODO  ajax刪除
+        console.log("ajax刪除書籍")
+      }
+  
+      function ajaxUpdateBook(formData){
+        console.log(formData)
+      }
+  
+   
+   
+      function initTab(){
+        
+      }
+      function returnZindex(){
+        let dom = document.getElementById("main")
+        dom.style.zIndex = 0;
+      }
+      function changeZindex(){
+        let dom = document.getElementById("main")
+        dom.style.zIndex = -1;
+      }
+      function returnZindex(){
+        let dom = document.getElementById("main")
+        dom.style.zIndex = 0;
+      }
+    
+      var openFile = function(event) {
+            var input = event.target;
+            console.log(event)
+            var reader = new FileReader();
+            reader.onload = function() {
+                if(reader.result) {
+                    //显示文件内容
+                    $("#output").html(reader.result);
+                }
+            };
+            reader.readAsText(input.files[0]);
+        };
+        function mouseup(){
+          // console.log("mouseup")
+          let w = window.getSelection();
+        }
+     
+   
+     
+    
+</script>
+<style>
+.main{
+  position:absolute;
+  top: 60px;
+  width: 96%;
+  margin-left: 2%;
+  height: 80%;
+  z-index: -1;
+  
+}
+.main2{
+  top: 80px;
+  position:absolute;
+  border: 1px solid #dde0e4;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.layui-upload-img{
+  width:92px;
+  height: 92px;
+  margin: 0 10px 10px 0;
+}
+</style>
+</html>
