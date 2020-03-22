@@ -98,7 +98,7 @@ public class BookController {
 			vo.setCover(imgPath+File.separator+"cover"+File.separator+nano+image.getOriginalFilename());
 		}
 		Book book = vo.convert();
-		Boolean result = bookService.save(book);
+		Boolean result = bookService.updateById(book);
 		if(result){
 			return AjaxResult.success("添加成功",bookService.getById(book.getId()));
 		}else {
