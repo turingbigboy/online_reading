@@ -32,7 +32,7 @@ function alertForm(title,id,callback){
             
         })
     }
-    function quesForm(content,callback){
+    function quesForm(content,callback,data){
       layer.confirm(content, {
         btn: ['確定','取消'] //按钮
         ,cancel: function(index, layero){
@@ -41,7 +41,7 @@ function alertForm(title,id,callback){
         }
       }, function(){
         //yes
-        callback()
+        callback(data)
       }, function(){
         returnParentListen();
         console.log("no")
@@ -169,7 +169,48 @@ function alertForm(title,id,callback){
         const ip = "http://localhost:8080/online_reading/"
         return ip;
     }
-    
+
+    function initPage(id,getPageParam,total,currentPage) {
+        layui.use('laypage', function(){
+            var laypage = layui.laypage;
+
+            //执行一个laypage实例
+            laypage.render({
+                elem: id //注意，这里的 test1 是 ID，不用加 # 号
+                ,count: total //数据总数，从服务端得到
+                ,curr:currentPage
+                ,jump: function(obj, first){
+                    //obj包含了当前分页的所有参数，比如：
+                    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                    console.log(obj.limit); //得到每页显示的条数
+                    //首次不执行
+                    if(!first){
+                        console.log("分页执行")
+                        //do something
+                        getPageParam(obj.curr,obj.limit)
+                    }
+
+                }
+            });
+        });
+    }
+    function layTable(id,cols,data) {
+        layui.use('table', function(){
+            var table = layui.table;
+            //展示已知数据
+            table.render({
+                elem: id
+                ,cols: cols
+                ,data: data
+                //,skin: 'line' //表格风格
+                ,even: true
+                //,page: true //是否显示分页
+                //,limits: [5, 7, 10]
+                //,limit: 5 //每页默认显示的数量
+            });
+        });
+    }
+
 //axios封装post请求
 function axiosPostRequst(url,data) {
   let result = axios({

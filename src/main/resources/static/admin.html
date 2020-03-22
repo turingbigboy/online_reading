@@ -36,12 +36,13 @@
                   <tbody id="uTBodyId">
                   </tbody>
                 </table>
+                  <div id="userPage"></div>
                 
               </div>
             <!--用戶管理 end-->
             <!--書籍管理-->
               <div class="layui-tab-item" id="bookManager">
-                <button type="button" class="layui-btn float-right mb-1" onclick="uploadBook()">上傳書籍</button>
+                <button type="button" class="layui-btn float-right mb-1" onclick="uploadBook()">上传书籍</button>
                   <!-- <button type="button" class="layui-btn float-right mb-1 mr-1" onclick="uploadChapter">新增章节</button> -->
                   <table class="layui-table">
                       <colgroup>
@@ -54,7 +55,7 @@
                           <!-- <th>書名</th>
                           <th>作者</th>
                           <th>上傳時間</th> -->
-                        </tr> 
+                        </tr>
                       </thead>
                       <tbody id="tBodyId">
                         <!-- <tr id="">
@@ -69,6 +70,7 @@
                         </tr> -->
                       </tbody>
                     </table>
+                  <div id="tablePage"></div>
                   <!-- <table class="tableClass" cellspacing="0" >
                       <th style="width:90px;" >序號</th>
                       <th v-for="item in tabletitle">{{item.name}}</th>
@@ -140,11 +142,18 @@
       function init(){
         returnZindex();
         initTab();
-        initTable()
+        initTable();
       }
         //拼接Book   由於時間控件的問題，這裡必須用拼接組裝js，否則會出现laydate闪现等bug
       function pjBook(){
-        var nHtml='<div class="layui-form-item">'
+        var nHtml='<div class="layui-form-item" style="display: none">'
+        nHtml+= '<label class="layui-form-label">id</label>'
+        nHtml+='<div class="layui-input-block">'
+        nHtml+='<input type="text" name="id" id="id" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
         nHtml+= '<label class="layui-form-label">书籍名称</label>'
         nHtml+='<div class="layui-input-block">'
         nHtml+='<input type="text" name="name" id="name" lay-verify="name" placeholder="请输入书籍名称" autocomplete="off" class="layui-input">'
@@ -171,12 +180,34 @@
         nHtml+='<input type="text" name="synopsis" id="synopsis" lay-verify="synopsis" placeholder="请输入简介" autocomplete="off" class="layui-input">'
         nHtml+='</div>'
         nHtml+='</div>'
-     
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">字数</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<input type="text" name="numberWorders" id="numberWorders" placeholder="请输入字数" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">封面</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<input type="text" name="cover" id="cover" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">书籍状态</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<input type="text" name="status" id="status" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
         nHtml+='<div class="layui-form-item">'
         nHtml+= '<label class="layui-form-label">出版时间</label>'
         nHtml+='<div class="layui-input-block">'
         nHtml+=' <input type="text" class="layui-input" name="publicationTime" id="publicationTime" placeholder="yyyy-MM-dd HH:mm:ss">'
         nHtml+='</div>'
+
         return nHtml;
       }
       function pjUser() {
@@ -219,67 +250,106 @@
           return nHtml;
       }
       function initTable(){
-          initBookTable();
-          initUserTable();
+          let params = {
+              page:1,
+              pageSize:10
+          }
+          initBookTable(params);
+          initUserTable(params);
+
 
       }
-      function initBookTable(Json,Title,thId,tBodyId){
-          axiosGetRequst("book",null).then(data=>{
-              console.log("table",data)
-          })
-        //加載數據
-        var bookJson=[
-                {name:"密战无痕",author:"长风",publishingHouse:"历史军事",synopsis:"密战无痕的简介",publicationTime:"2020-04-01 00:00:00"},
-                {name:"凡尘一剑",author:"剑东来",publishingHouse:"武侠修真",synopsis:"凡尘一剑的简介",publicationTime:"2019-04-28 00:00:00"},
-                {name:"我真的是人生赢家",author:"刘阿懦",publishingHouse:"其他类型",synopsis:"我真的是人生赢家的简介",publicationTime:"2020-04-28 00:00:00"},
-                {name:"次元法典",author:"西贝猫",publishingHouse:"网游动漫",synopsis:"托身白刃里，浪迹红的简介",publicationTime:"2020-04-28 00:00:00"},
-                {name:"托身白刃里，浪迹红",author:"接卡口",publishingHouse:"武侠修真",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
-                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
-                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
-                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
-                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
-                {name:"我的异能悠闲生活",author:"开水很白",publishingHouse:"都市言情",synopsis:"密战无痕的简介",publicationTime:"2020-04-28 00:00:00"},
-        ]
-        var bookTitle = [
-        {name:'书籍名称',key:'name'},
-        {name:'作者',key:'author'},
-        {name:'出版社',key:'publishingHouse'},
-        {name:'简介',key:'synopsis'},
-        {name:"出版時間",key:'publicationTime'}
-        ]
-        if(bookJson){
-          var keys = Object.keys(bookJson[0]);
-          console.log(keys)
+
+     function getTablePageParam(curr,limit) {
+         console.log("接收到的分页",curr,limit)
+         if(curr&&limit){
+             let params={
+                 pageSize:limit,
+                 page:curr
+             }
+             initBookTable(params)
+         }else{
+             return false;
+         }
+     }
+    function getUserPageParam(curr,limit) {
+        console.log("接收到的分页",curr,limit)
+        if(curr&&limit){
+            let params={
+                pageSize:limit,
+                page:curr
+            }
+            initUserTable(params)
+        }else{
+            return false;
         }
-        let thHtml="";
-        let tBodyHtml ="";
-        for(let title of bookTitle){
-          thHtml+='<th>'+title.name+'</th>'
-        }
-        thHtml+='<th style="width:280px">操作</th>'
-        $("#thId").html(thHtml);
-        for(let item of bookJson){
-          tBodyHtml+='<tr>'
-          for(let key of Object.keys(item)){
-            tBodyHtml+='<td>'+item[key]+'</td>'
+    }
+      function initBookTable(params){
+          let getBook={
+              url:ip+"book",
+              method:"GET",
+              params:params
           }
-          var $row = JSON.stringify(item).replace(/\"/g,"'");
-          tBodyHtml+='<td><button type="button" class="layui-btn layui-btn-normal float-left mb-1" onclick="updateBook('+$row+')" >修改</button>'
-          tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="uploadChapter('+$row+')">新增章节</button>'
-          tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteBook('+$row+')">刪除</button></td>'
-          tBodyHtml+='</tr>'
-        }
-        $("#tBodyId").html(tBodyHtml)
+          axios(getBook).then(data=>{
+              console.log("table",data)
+              console.log("书籍数据",data.data.data.records);
+              initPage("tablePage",getTablePageParam,data.data.data.total,params.page);
+              var bookJson=data.data.data.records;
+          var bookTitle = [
+              {name:'id',key:'id'},
+              {name:'书籍名称',key:'name'},
+              {name:'作者',key:'author'},
+              {name:"出版社",key:'publishingHouse'},
+              {name:"出版時間",key:'publicationTime'},
+              {name:'简介',key:'synopsis'},
+              {name:'字数',key:'numberWorders'},
+              {name:'封面',key:'cover'},
+              {name:'状态',key:'status'},
+              {name:'创建时间',key:'createTime'},
+          ]
+          if(bookJson){
+              var keys = Object.keys(bookJson[0]);
+              console.log(keys)
+          }
+          let thHtml="";
+          let tBodyHtml ="";
+          for(let title of bookTitle){
+              if(title.key=="id"){
+                  thHtml+='<th class="small">'+title.name+'</th>'
+              }else{
+                  thHtml+='<th>'+title.name+'</th>'
+              }
+          }
+          thHtml+='<th style="width:300px">操作</th>'
+          $("#thId").html(thHtml);
+          for(let item of bookJson){
+              tBodyHtml+='<tr>'
+              for(let title of bookTitle){
+                  if(title.key=="id"){
+                      tBodyHtml+='<td class="small">'+item[title.key]+'</td>'
+                  }else{
+                      tBodyHtml+='<td>'+item[title.key]+'</td>'
+                  }
+              }
+              var $row = JSON.stringify(item).replace(/\"/g,"'");
+              tBodyHtml+='<td><button type="button" class="layui-btn layui-btn-normal float-left mb-1" onclick="updateBook('+$row+')" >修改</button>'
+              tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="uploadChapter('+$row+')">新增章节</button>'
+              tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteBook('+$row+')">刪除</button></td>'
+              tBodyHtml+='</tr>'
+          }
+          $("#tBodyId").html(tBodyHtml)
+          })
       }
-      function initUserTable() {
+      function initUserTable(params) {
           let getUser = {
               url:ip+"user",
-              method:"",
-              param:{}
+              method:"GET",
+              params:params
           }
           axios(getUser).then(data=>{
               console.log("用户数据",data)
               console.log("分页后数据",data.data.data.records);
+              initPage("userPage",getUserPageParam,data.data.data.total,params.page);
               let usrtJson = data.data.data.records;
               //有数据才将表格显示出来
               if(usrtJson){
@@ -329,6 +399,7 @@
       }
       function ajaxUpdateBook(form) {
           //TODO 更新书籍
+
       }
       function ajaxUpdateUser(form) {
           form.name = form.username;
@@ -349,7 +420,10 @@
           name: "",
           author: "",
           publishingHouse: "",
-          synopsis: ""
+          synopsis: "",
+          numberWorders:"",
+          cover:"",
+          status:""
         }
         let html = pjBook();
         alertcomfirm2("addBookLayer","添加书籍",html,"addBookVerify",'#publicationTime',validateAddBook,ajaxAddBook,rowList,getFormData)
@@ -372,15 +446,19 @@
       }
       //渲染後設置值獲取數據(修改的數據打開在這裡賦值)
       function getFormData(rowList){
+        document.getElementById("id").value=rowList.id;
         document.getElementById("name").value=rowList.name;
         document.getElementById("author").value=rowList.author;
+        document.getElementById("status").value=rowList.status;
         document.getElementById("publishingHouse").value=rowList.publishingHouse;
         document.getElementById("synopsis").value=rowList.synopsis;
-        // document.getElementById("publicationTime").value=rowList.publicationTime;
+        document.getElementById("numberWorders").value=rowList.numberWorders;
+        document.getElementById("cover").value=rowList.cover;
+        document.getElementById("publicationTime").value=rowList.publicationTime;
       }
       function deleteBook(rowList){
         console.log(rowList)
-        quesForm("你確定要刪除嗎？",deleteBookAjax)
+        quesForm("你確定要刪除嗎？",deleteBookAjax,rowList)
       }
       function validateAddBook(form){
               var form = layui.form;
@@ -405,9 +483,9 @@
             method:"POST",
             data:data
           }
-          axios.post(addBook).then(res=>{
-              console.log("新增",res)
-          }).catch(err=>{console.log(err)})
+          axios(addBook).then(res=>{
+              alertLayer("编辑书籍","新增成功",closeForm);
+          }).catch(err=>{alertLayer2("编辑书籍",err);})
       }
       function  addUser() {
           let rowList = {
@@ -444,13 +522,22 @@
           layer.closeAll();
           init();
       }
-      function deleteBookAjax(){
-        //TODO  ajax刪除
-        console.log("ajax刪除書籍")
+      function deleteBookAjax(form){
+          axios.delete(ip+"book/"+form.id).then(()=>{
+              alertLayer("删除书籍","删除成功",closeForm);
+          }).catch(err=>{alertLayer2("删除书籍",err)})
       }
-  
+
       function ajaxUpdateBook(formData){
         console.log(formData)
+          let updateBook={
+              url:ip+"book/",
+              method:"PUT",
+              data:formData
+          }
+          axios(updateBook).then(()=>{
+              alertLayer("修改书籍","修改成功",closeForm);
+          }).catch(err=>alertLayer2("修改书籍",err))
       }
   
    
@@ -493,26 +580,29 @@
     
 </script>
 <style>
-.main{
-  position:absolute;
-  top: 60px;
-  width: 96%;
-  margin-left: 2%;
-  height: 80%;
-  z-index: -1;
-  
-}
-.main2{
-  top: 80px;
-  position:absolute;
-  border: 1px solid #dde0e4;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.layui-upload-img{
-  width:92px;
-  height: 92px;
-  margin: 0 10px 10px 0;
-}
+    .main{
+      position:absolute;
+      top: 60px;
+      width: 96%;
+      margin-left: 2%;
+      height: 80%;
+      z-index: -1;
+
+    }
+    .main2{
+      top: 80px;
+      position:absolute;
+      border: 1px solid #dde0e4;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .layui-upload-img{
+      width:92px;
+      height: 92px;
+      margin: 0 10px 10px 0;
+    }
+    .small{
+        width: 10px !important;
+    }
 </style>
 </html>
