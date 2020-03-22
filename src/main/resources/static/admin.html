@@ -333,8 +333,8 @@
       function ajaxUpdateUser(form) {
           form.name = form.username;
           let updateUser={
-              url:ip+"user/register",
-              method:"POST",
+              url:ip+"user/",
+              method:"put",
               data:form
           }
           axios(updateUser).then(()=>{

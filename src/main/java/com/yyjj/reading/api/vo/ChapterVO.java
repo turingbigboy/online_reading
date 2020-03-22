@@ -5,6 +5,7 @@ import com.yyjj.reading.service.bo.ChapterBO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -60,6 +61,7 @@ public class ChapterVO implements Serializable {
 	/**
 	 * 创建时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	private LocalDateTime createTime;
      
     public static ChapterVO newInstance(Chapter chapter) {

@@ -32,9 +32,8 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 	// 添加视图映射
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {	
-		registry.addViewController("/admin/shop/shop_info.html").setViewName("admin/shop/shop_info");
-
-		
+		//registry.addViewController("/index.html").setViewName("index");
+		//registry.addViewController("/layout.html").setViewName("layout");
 	}
 	
 	
@@ -54,7 +53,7 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 	        registration.excludePathPatterns(
 	        		 "/**/login.html",
 	        		 "/**/login",//登录
-	        		 "/**//register",
+	        		 "/**/register",
                          //html静态资源
                      "/**/*.js",              //js静态资源
                      "/**/*.css" ,
@@ -74,7 +73,7 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 
 				SimpleModule simpleModule = new SimpleModule("JsonMapSerializer", Version.unknownVersion());
 
-				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 				simpleModule.addSerializer(new LocalDateTimeSerializer(dateTimeFormatter));
 
 				// 忽略字段为null的数据
@@ -96,6 +95,4 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 				.addResourceLocations("classpath:/public/");
 		super.addResourceHandlers(registry);
 	}
-	
-	
 }

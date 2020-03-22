@@ -7,6 +7,7 @@
      <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="./layui/layui/dist/layui.all.js"></script>
     <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/axios.js"></script>
 </head>
 <body >
   <!-- <iframe MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no src="./MyShelf.html" width="100%"  height="auto"></iframe> -->
@@ -99,6 +100,7 @@
         <!--註冊 end-->
         <!--轮播图 end-->
         <script>
+            var ip = "http://localhost:8080/online_reading/";
             //初始化
             $(function() {
               //验证是否登录，登录则显示用户信息，否则显示登录信息
@@ -189,7 +191,20 @@
             function clickRegister(){
               alertcomfirm("registerLayer","註冊","#registerId",'registerVerify',validateRegister,ajaxRegister)
             }
+            function closeForm() {
+                layer.closeAll();
+                init();
+            }
             function ajaxLogin(data){
+                //TODO 登录
+                // let login={
+                //     url:ip+"user/login",
+                //     method:"POST",
+                //     data:data
+                // }
+                // axios(login).then(data=>{
+                //     alertLayer2("登录","登录成功");
+                // }).catch(err=>{alertLayer2("编辑用户",err)})
               console.log(data)
               //如果成功，將status寫入session
               sessionStorage.setItem("status", 1);

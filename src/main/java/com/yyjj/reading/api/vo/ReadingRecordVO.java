@@ -5,6 +5,7 @@ import com.yyjj.reading.service.bo.ReadingRecordBO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -66,6 +67,7 @@ public class ReadingRecordVO implements Serializable {
 	/**
 	 * 记录时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	private LocalDateTime redcordTime;
      
     public static ReadingRecordVO newInstance(ReadingRecord readingrecord) {
