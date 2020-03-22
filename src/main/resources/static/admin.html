@@ -18,6 +18,7 @@
             <ul class="layui-tab-title">
               <li class="layui-this">用戶管理</li>
               <li>書籍管理</li>
+               <li>分类管理</li>
             </ul>
             <!--用戶管理-->
             <div class="layui-tab-content" id="tabContent">
@@ -52,88 +53,39 @@
                       </colgroup>
                       <thead>
                         <tr id="thId">
-                          <!-- <th>書名</th>
-                          <th>作者</th>
-                          <th>上傳時間</th> -->
                         </tr>
                       </thead>
                       <tbody id="tBodyId">
-                        <!-- <tr id="">
-                          <td>書名1</td>
-                          <td>作者1</td>
-                          <td>上傳時間1</td>
-                        </tr>
-                        <tr>
-                          <td>書名2</td>
-                          <td>作者2</td>
-                          <td>上傳時間2</td>
-                        </tr> -->
                       </tbody>
                     </table>
                   <div id="tablePage"></div>
-                  <!-- <table class="tableClass" cellspacing="0" >
-                      <th style="width:90px;" >序號</th>
-                      <th v-for="item in tabletitle">{{item.name}}</th>
-                      <th style="width:90px;" >操作</th>
-                      <tbody >
-                        <tr>
-                        <td>
-                          
-                        </td>
-                        <td v-for="col in tabletitle" :key="col.key" style="width:150px;height:40px;" >
-                         
-                        </td>
-                        <td style="width:90px;height:40px">
-                          <div style="line-height:38px;">
-                            <i style="font-size: 22px;" @click="spliceRow(tabledata,index)" class="el-icon-remove-outline" v-if="row.newFlag"></i>
-                            <el-button  type="text" size="small" @click="deleteRow(tabledata,index)" style="color:red" v-else>刪除</el-button>
-                          </div>
-                        </td>
-                        </tr>
-                      </tbody>
-                    </table> -->
               </div>
             <!--書籍管理 end-->
+                <!--分类管理-->
+                <div class="layui-tab-item" id="typeManager">
+                    <button type="button" class="layui-btn mb-1 float-right" onclick="addType()">新增分类</button>
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr id="typeThId">
+                        </tr>
+                        </thead>
+                        <tbody id="typeBodyId">
+                        </tbody>
+                    </table>
+                    <div id="typePage"></div>
+                </div>
+                <!--書籍管理 end-->
 
             </div>
           </div>
       </div>
     </div>
-    <!--新增书籍-->
-    <!-- <form class="layui-form" id="addBook" action="" style="display: none;">
-      <div class="layui-form-item">
-        <label class="layui-form-label">书籍名称</label>
-        <div class="layui-input-block">
-          <input type="text" name="name" lay-verify="name" placeholder="请输入书籍名称" autocomplete="off" class="layui-input">
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">作者</label>
-        <div class="layui-input-inline">
-          <input type="text" name="author" lay-verify="author" placeholder="请输入作者" autocomplete="off" class="layui-input">
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">出版社</label>
-        <div class="layui-input-inline">
-          <input type="text" name="publishingHouse" lay-verify="publishingHouse" placeholder="请输入出版社" autocomplete="off" class="layui-input">
-        </div>
-      </div>
-      <div class="layui-form-item">
-          <label class="layui-form-label">出版时间</label>
-            <input type="text" class="layui-input" id="publicationTime2" placeholder="yyyy-MM-dd HH:mm:ss">
-      </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">简介</label>
-        <div class="layui-input-inline">
-          <input type="txt" name="synopsis" lay-verify="synopsis" placeholder="请输入简介" autocomplete="off" class="layui-input">
-        </div>
-      </div>
-    </form> -->
-    <!--新增书籍 end-->
-
-       <!-- <button class="sub-bindbtn" lay-submit lay-filter="bind" style="display: none;"> -->
-  </body>
+      </body>
 <script>
     var ip = initIP();
       $(function() {
@@ -249,6 +201,23 @@
           nHtml+='</div>'
           return nHtml;
       }
+      function pjType() {
+          var nHtml = '<div class="layui-form-item" style="display: none">'
+          nHtml+='<label class="layui-form-label">id</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+=' <input type="text" name="id" id="id" autocomplete="off" class="layui-input">'
+          nHtml+=' </div>'
+          nHtml+='</div>'
+          nHtml+='<div class="layui-form-item">'
+          nHtml+='<label class="layui-form-label">类型</label>'
+          nHtml+='<div class="layui-input-block">'
+          nHtml+='<input type="text" name="typeName" id="typeName"  placeholder="请输入类型名称" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+
+
+          return nHtml;
+      }
       function initTable(){
           let params = {
               page:1,
@@ -256,11 +225,12 @@
           }
           initBookTable(params);
           initUserTable(params);
+          initTypeTable(params)
 
 
       }
 
-     function getTablePageParam(curr,limit) {
+      function getTablePageParam(curr,limit) {
          console.log("接收到的分页",curr,limit)
          if(curr&&limit){
              let params={
@@ -272,7 +242,7 @@
              return false;
          }
      }
-    function getUserPageParam(curr,limit) {
+      function getUserPageParam(curr,limit) {
         console.log("接收到的分页",curr,limit)
         if(curr&&limit){
             let params={
@@ -284,6 +254,56 @@
             return false;
         }
     }
+      function getTypeParam(curr,limit) {
+          if(curr&&limit){
+              let params={
+                  pageSize:limit,
+                  page:curr
+              }
+              initTypeTable(params)
+          }else{
+              return false;
+          }
+      }
+      function initTypeTable(params) {
+          let getType={
+              url:ip+"type",
+              method:"GET",
+              params:params
+          }
+          axios(getType).then(data=>{
+              console.log("table",data)
+              console.log("书籍数据",data.data.data.records);
+          initPage("typePage",getTypeParam,data.data.data.total,params.page);
+          var typeJson=data.data.data.records;
+          var typeTitle = [
+              {name:'id',key:'id'},
+              {name:'分类名称',key:'typeName'},
+          ]
+          if(typeJson){
+              var keys = Object.keys(typeJson[0]);
+              console.log(keys)
+          }
+          let thHtml="";
+          let tBodyHtml ="";
+          for(let title of typeTitle){
+             thHtml+='<th>'+title.name+'</th>'
+          }
+          thHtml+='<th>操作</th>'
+          $("#typeThId").html(thHtml);
+          for(let item of typeJson){
+              tBodyHtml+='<tr>'
+              for(let title of typeTitle){
+                 tBodyHtml+='<td>'+item[title.key]+'</td>'
+              }
+              var $row = JSON.stringify(item).replace(/\"/g,"'");
+              tBodyHtml+='<td><button type="button" class="layui-btn layui-btn-normal float-left mb-1" onclick="updateType('+$row+')" >修改</button>'
+              tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteType('+$row+')">刪除</button></td>'
+              tBodyHtml+='</tr>'
+          }
+          $("#typeBodyId").html(tBodyHtml)
+      })
+     }
       function initBookTable(params){
           let getBook={
               url:ip+"book",
@@ -316,24 +336,33 @@
           for(let title of bookTitle){
               if(title.key=="id"){
                   thHtml+='<th class="small">'+title.name+'</th>'
-              }else{
+              }
+              else if(title.key=="name"){
+                  thHtml+='<th class="middle">'+title.name+'</th>'
+              }
+              else{
                   thHtml+='<th>'+title.name+'</th>'
               }
           }
-          thHtml+='<th style="width:300px">操作</th>'
+          thHtml+='<th style="width:400px">操作</th>'
           $("#thId").html(thHtml);
           for(let item of bookJson){
               tBodyHtml+='<tr>'
               for(let title of bookTitle){
                   if(title.key=="id"){
                       tBodyHtml+='<td class="small">'+item[title.key]+'</td>'
-                  }else{
+                  }
+                  else if(title.key=="name"){
+                      tBodyHtml+='<td class="middle">'+item[title.key]+'</td>'
+                  }
+                  else{
                       tBodyHtml+='<td>'+item[title.key]+'</td>'
                   }
               }
               var $row = JSON.stringify(item).replace(/\"/g,"'");
               tBodyHtml+='<td><button type="button" class="layui-btn layui-btn-normal float-left mb-1" onclick="updateBook('+$row+')" >修改</button>'
               tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="uploadChapter('+$row+')">新增章节</button>'
+              tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="typeBook('+$row+')">分类</button>'
               tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteBook('+$row+')">刪除</button></td>'
               tBodyHtml+='</tr>'
           }
@@ -397,10 +426,6 @@
           let html = pjUser();
           alertcomfirm2("updateUserLayer","修改用户",html,"updateUserVerify",null,validateAddUser,ajaxUpdateUser,row,getUserData)
       }
-      function ajaxUpdateBook(form) {
-          //TODO 更新书籍
-
-      }
       function ajaxUpdateUser(form) {
           form.name = form.username;
           let updateUser={
@@ -412,8 +437,13 @@
               alertLayer("编辑用户","修改成功",closeForm);
       }).catch(err=>{alertLayer2("编辑用户",err)})
       }
-      function deleteUser(row) {
-          console.log(row)
+      function deleteUser(rowList) {
+          quesForm("你確定要刪除嗎？",deleteUserAjax,rowList)
+      }
+      function deleteUserAjax(form) {
+        axios.delete(ip+"user/"+form.id).then(()=>{
+            alertLayer("删除用户","删除成功",closeForm);
+          }).catch(err=>{alertLayer2("删除用户",err)})
       }
       function uploadBook(){
         let rowList = {
@@ -444,6 +474,10 @@
           document.getElementById("identity").value=rowList.identity;
 
       }
+      function getTypeData(rowList) {
+          document.getElementById("id").value=rowList.id;
+          document.getElementById("typeName").value=rowList.typeName;
+      }
       //渲染後設置值獲取數據(修改的數據打開在這裡賦值)
       function getFormData(rowList){
         document.getElementById("id").value=rowList.id;
@@ -459,6 +493,19 @@
       function deleteBook(rowList){
         console.log(rowList)
         quesForm("你確定要刪除嗎？",deleteBookAjax,rowList)
+      }
+      function typeBook(row) {
+          // let tHtml = "";
+          // tHtml+='<div class="layui-form-item">'
+          // tHtml+='<label class="layui-form-label">选择书籍分类</label>'
+          // tHtml+='<div class="layui-input-block">'
+          // tHtml+='<select name="interest" lay-filter="aihao">'
+          // tHtml+='<option value="0">写作</option>'
+          // tHtml+='<option value="1">阅读</option>'
+          // tHtml+='</select>'
+          // tHtml+='</div>'
+          // tHtml+='</div>'
+          console.log(row)
       }
       function validateAddBook(form){
               var form = layui.form;
@@ -497,6 +544,29 @@
           let html = pjUser();
           alertcomfirm2("addUserLayer","添加用户",html,"addUserVerify",null,validateAddUser,ajaxAddUser,rowList,getUserData)
       }
+      function addType() {
+          let rowList={
+              id:"",
+              typeName:""
+          }
+          let html = pjType();
+          alertcomfirm2("addTypeLayer","添加类型",html,"addTypeVerify",null,validateAddType,ajaxAddType,rowList,getTypeData)
+      }
+      function updateType(row) {
+          console.log(row)
+          let html = pjType();
+          alertcomfirm2("updateTypeLayer","修改类型",html,"updateUserVerify",null,validateAddUser,ajaxUpdateType,row,getTypeData)
+
+      }
+      function deleteType(row) {
+          console.log(row)
+          quesForm("你確定要刪除嗎？",deleteTypeAjax,row)
+      }
+      function deleteTypeAjax(form) {
+          axios.delete(ip+"type/"+form.id).then(()=>{
+              alertLayer("删除类型","删除成功",closeForm);
+      }).catch(err=>{alertLayer2("删除类型",err)})
+      }
     function validateAddUser(form) {
             var form = layui.form;
             form.verify({
@@ -506,6 +576,16 @@
                     }
                 }
             });
+    }
+    function validateAddType(form) {
+        var form = layui.form;
+        form.verify({
+            typeName:function (value) {
+                if(!value){
+                    return "参数不能为空"
+                }
+            }
+        });
     }
       function ajaxAddUser(form) {
           console.log(form)
@@ -518,6 +598,27 @@
               alertLayer("编辑用户","新增成功",closeForm);
           }).catch(err=>{alertLayer2("编辑用户",err)})
       }
+      function ajaxAddType(form) {
+          console.log(form)
+          let addUser = {
+              url:ip+"type",
+              method:"POST",
+              data:form
+          }
+          axios(addUser).then(()=>{
+              alertLayer("新增类型","新增成功",closeForm);
+      }).catch(err=>{alertLayer2("新增类型",err)})
+      }
+      function ajaxUpdateType(form) {
+          let addUser = {
+              url:ip+"type",
+              method:"PUT",
+              data:form
+          }
+          axios(addUser).then(()=>{
+              alertLayer("修改类型","修改成功",closeForm);
+      }).catch(err=>{alertLayer2("修改类型",err)})
+      }
       function closeForm() {
           layer.closeAll();
           init();
@@ -527,9 +628,7 @@
               alertLayer("删除书籍","删除成功",closeForm);
           }).catch(err=>{alertLayer2("删除书籍",err)})
       }
-
       function ajaxUpdateBook(formData){
-        console.log(formData)
           let updateBook={
               url:ip+"book/",
               method:"PUT",
@@ -602,7 +701,14 @@
       margin: 0 10px 10px 0;
     }
     .small{
-        width: 10px !important;
+        /*width: 10px !important;*/
+        width: 2%;
+    }
+    .middle{
+        width:10%
+    }
+    .layui-table th, .layui-table td{
+        padding: 2px 2px !important;
     }
 </style>
 </html>
