@@ -74,7 +74,7 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 
 				SimpleModule simpleModule = new SimpleModule("JsonMapSerializer", Version.unknownVersion());
 
-				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 				simpleModule.addSerializer(new LocalDateTimeSerializer(dateTimeFormatter));
 
 				// 忽略字段为null的数据

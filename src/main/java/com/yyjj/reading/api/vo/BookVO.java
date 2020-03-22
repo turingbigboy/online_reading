@@ -5,6 +5,7 @@ import com.yyjj.reading.service.bo.BookBO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -46,6 +47,7 @@ public class BookVO implements Serializable {
 	/**
 	 * 出版时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	private LocalDateTime publicationTime;
 
 	/**
@@ -70,6 +72,7 @@ public class BookVO implements Serializable {
 	/**
 	 * 创建时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	private LocalDateTime createTime;
      
     public static BookVO newInstance(Book book) {
