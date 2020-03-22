@@ -146,7 +146,23 @@ public class UserController {
 			return AjaxResult.failed("修改失败");
 		}
 	}
-	
+
+	/**
+	 * 删除用户
+	 * @param id
+	 * @return
+	 */
+	@DeleteMapping("{id:\\d+}")
+	public AjaxResult<UserVO> delete(@PathVariable Integer id) {
+		boolean result = userService.removeById(id);
+		if(result) {
+			return AjaxResult.success("删除成功");
+		}else {
+			return AjaxResult.failed("删除失败");
+		}
+	}
+
+
 	private BasePage<UserVO> convert(BasePage<User> basePage) {
 		List<UserVO> resultList = new ArrayList<UserVO>();
 					
