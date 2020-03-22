@@ -38,7 +38,7 @@
                   </tbody>
                 </table>
                   <div id="userPage"></div>
-                
+
               </div>
             <!--用戶管理 end-->
             <!--書籍管理-->
@@ -80,7 +80,7 @@
                     <div id="typePage"></div>
                 </div>
                 <!--書籍管理 end-->
-
+                <div id="typeHtml"></div>
             </div>
           </div>
       </div>
@@ -211,7 +211,7 @@
           nHtml+='<div class="layui-form-item">'
           nHtml+='<label class="layui-form-label">类型</label>'
           nHtml+='<div class="layui-input-block">'
-          nHtml+='<input type="text" name="typeName" id="typeName"  placeholder="请输入类型名称" autocomplete="off" class="layui-input">'
+          nHtml+='<input type="text" name="typeName" id="typeName" lay-verify="typeName" placeholder="请输入类型名称" autocomplete="off" class="layui-input">'
           nHtml+='</div>'
           nHtml+='</div>'
 
@@ -474,6 +474,10 @@
           document.getElementById("identity").value=rowList.identity;
 
       }
+      function getBookTypeData(rowList){
+        document.getElementById("bookId").value=rowList.bookId;
+        document.getElementById("typeId").value=rowList.typeId;
+    }
       function getTypeData(rowList) {
           document.getElementById("id").value=rowList.id;
           document.getElementById("typeName").value=rowList.typeName;
@@ -495,17 +499,42 @@
         quesForm("你確定要刪除嗎？",deleteBookAjax,rowList)
       }
       function typeBook(row) {
-          // let tHtml = "";
-          // tHtml+='<div class="layui-form-item">'
-          // tHtml+='<label class="layui-form-label">选择书籍分类</label>'
-          // tHtml+='<div class="layui-input-block">'
-          // tHtml+='<select name="interest" lay-filter="aihao">'
-          // tHtml+='<option value="0">写作</option>'
-          // tHtml+='<option value="1">阅读</option>'
-          // tHtml+='</select>'
-          // tHtml+='</div>'
-          // tHtml+='</div>'
-          console.log(row)
+          //获取所有type
+          let getType={
+              url:ip+"type",
+              method:"GET",
+              params:{}
+          }
+         axios(getType).then(data=>{
+              console.log("所有类型有"+data)
+              console.log("所有类型有"+data.data.data.records)
+              let typeJson = data.data.data.records;
+          var nHtml = '<div class="layui-form-item" style="display: none">'
+          nHtml+='<label class="layui-form-label">id</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+=' <input type="text" name="bookId" id="bookId" autocomplete="off" class="layui-input">'
+          nHtml+=' </div>'
+          nHtml+='</div>'
+          nHtml+='<div class="layui-form-item">'
+          nHtml+='<label class="layui-form-label">书籍类别</label>'
+          nHtml+='<div class="layui-input-block">'
+          nHtml+='<select name="typeId" id="typeId" lay-verify="typeId">'
+          nHtml+='<option value="">---请选择---</option>'
+          for(let item of typeJson){
+              nHtml+='<option value='+item.id+'>'+item.typeName+'</option>'
+          }
+          nHtml+='</select>'
+          nHtml+='</div>'
+          nHtml+='</div>'
+          let rowList = {
+              bookId:row.id,
+              typeId:""
+          }
+          alertcomfirm2("addBookTypeLayer","添加书籍类型",nHtml,"addBookTypeVerify",null,validateBookType,ajaxAddBookType,rowList,getBookTypeData)
+         })
+
+
+
       }
       function validateAddBook(form){
               var form = layui.form;
@@ -522,6 +551,7 @@
                   }
                 });
       }
+
       function ajaxAddBook(data){
         console.log(data)
         //如果成功，將status寫入session
@@ -537,9 +567,10 @@
       function  addUser() {
           let rowList = {
               name: "",
-              author: "",
-              publishingHouse: "",
-              synopsis: ""
+              password:"",
+              account:"",
+              icon:"",
+              identity:""
           }
           let html = pjUser();
           alertcomfirm2("addUserLayer","添加用户",html,"addUserVerify",null,validateAddUser,ajaxAddUser,rowList,getUserData)
@@ -577,6 +608,16 @@
                 }
             });
     }
+    function validateBookType(form) {
+        var form = layui.form;
+        form.verify({
+            typeId:function (value) {
+                if(!value){
+                    return "参数不能为空"
+                }
+            }
+        });
+    }
     function validateAddType(form) {
         var form = layui.form;
         form.verify({
@@ -586,6 +627,20 @@
                 }
             }
         });
+    }
+    function ajaxAddBookType(form) {
+        // validateBookType(form)
+          console.log(form)
+        if(form.typeId&&form.bookId){
+            let addBookType = {
+                url:ip+"book-type/",
+                method:"POST",
+                data:form
+            }
+            axios(addBookType).then(()=>{
+                alertLayer("编辑书籍类型","编辑成功",closeForm);
+        }).catch(err=>{alertLayer2("编辑用户",err)})
+        }
     }
       function ajaxAddUser(form) {
           console.log(form)
@@ -638,9 +693,6 @@
               alertLayer("修改书籍","修改成功",closeForm);
           }).catch(err=>alertLayer2("修改书籍",err))
       }
-  
-   
-   
       function initTab(){
         
       }
@@ -709,6 +761,9 @@
     }
     .layui-table th, .layui-table td{
         padding: 2px 2px !important;
+    }
+    .layui-form-select{
+        width: 190px !important;
     }
 </style>
 </html>
