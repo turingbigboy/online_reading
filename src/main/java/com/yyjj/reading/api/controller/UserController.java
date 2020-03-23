@@ -112,7 +112,7 @@ public class UserController {
 	@GetMapping("logout")
 	public void logout(HttpServletRequest request, HttpServletResponse respose) throws IOException {
 		request.getSession().setAttribute("user", null);
-		respose.sendRedirect("login");
+		AjaxResult.success("注销成功！");
 	}
 
 	/**
