@@ -49,12 +49,12 @@ public class ChapterController {
 	
 	/**
 	 *获取指定章节
-	 * @param id Chapterid
+	 * @param ChapterId Chapterid
 	 * @return
 	 */
-	@GetMapping("/{id:\\d+}")
-	public AjaxResult<ChapterVO> Detail(@PathVariable Integer id) {
-		return AjaxResult.success("",convert(chapterService.getById(id)));
+	@GetMapping("/detail/{ChapterId:\\d+}")
+	public AjaxResult<ChapterVO> Detail(@PathVariable Integer ChapterId) {
+		return AjaxResult.success("",convert(chapterService.getById(ChapterId)));
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class ChapterController {
 	 * @param userId 用户ID
 	 * @return
 	 */
-	@GetMapping("/{userId:\\d+}/{chapterId:\\d+}")
+	@GetMapping("/read/{userId:\\d+}/{chapterId:\\d+}")
 	public AjaxResult<ChapterVO> readingDetail(@PathVariable Integer userId,@PathVariable Integer chapterId) {
 		//一条新的阅读记录
 		ReadingRecord rr = new ReadingRecord();
