@@ -60,7 +60,7 @@
                     </table>
                   <div id="tablePage"></div>
               </div>
-            <!--書籍管理 end-->
+                <!--書籍管理 end-->
                 <!--分类管理-->
                 <div class="layui-tab-item" id="typeManager">
                     <button type="button" class="layui-btn mb-1 float-right" onclick="addType()">新增分类</button>
@@ -79,8 +79,8 @@
                     </table>
                     <div id="typePage"></div>
                 </div>
-                <!--書籍管理 end-->
                 <div id="typeHtml"></div>
+                <!--分类管理 end-->
             </div>
           </div>
       </div>
@@ -215,6 +215,110 @@
           nHtml+='</div>'
           nHtml+='</div>'
 
+
+          return nHtml;
+      }
+      function pjChapter(row){
+        var nHtml='<div class="layui-form-item" style="display: none">'
+        nHtml+= '<label class="layui-form-label">id</label>'
+        nHtml+='<div class="layui-input-block">'
+        nHtml+='<input type="text" name="id" id="id" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item" style="display: none">'
+        nHtml+= '<label class="layui-form-label">书籍id</label>'
+        nHtml+='<div class="layui-input-block">'
+        nHtml+='<input type="text" name="bookId" value="'+row.id+'" readonly id="bookId" lay-verify="bookId" placeholder="请输入书籍名称" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">书籍名称</label>'
+        nHtml+='<div class="layui-input-block">'
+        nHtml+='<input type="text" name="bookName" value="'+row.bookName+'" readonly id="bookName" lay-verify="bookName" placeholder="请输入书籍名称" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">字数</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<input type="number" name="numberWorders" id="numberWorders" placeholder="请输入字数" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">章节标题</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<input type="text" name="title" id="title" lay-verify="title" placeholder="请输入章节标题" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">章节序号</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<input type="number" name="sort" id="sort" lay-verify="sort" placeholder="请输入章节序号" autocomplete="off" class="layui-input">'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        nHtml+='<div class="layui-form-item">'
+        nHtml+= '<label class="layui-form-label">章节内容</label>'
+        nHtml+='<div class="layui-input-inline">'
+        nHtml+='<textarea  name="content" id="content" lay-verify="content" placeholder="请输入章节内容" autocomplete="off" class="layui-textarea"></textarea>'
+        nHtml+='</div>'
+        nHtml+='</div>'
+
+        return nHtml;
+    }
+      function pjUpdateChapter(row){
+          var nHtml='<div class="layui-form-item" style="display: none">'
+          nHtml+= '<label class="layui-form-label">id</label>'
+          nHtml+='<div class="layui-input-block">'
+          nHtml+='<input type="text" name="id" id="id" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+
+          nHtml+='<div class="layui-form-item" style="display: none">'
+          nHtml+= '<label class="layui-form-label">书籍id</label>'
+          nHtml+='<div class="layui-input-block">'
+          nHtml+='<input type="text" name="bookId" value="'+row.id+'" readonly id="bookId" lay-verify="bookId" placeholder="请输入书籍名称" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+
+          nHtml+='<div class="layui-form-item">'
+          nHtml+= '<label class="layui-form-label">书籍名称</label>'
+          nHtml+='<div class="layui-input-block">'
+          nHtml+='<input type="text" name="bookName" value="'+row.bookName+'" readonly id="bookName" lay-verify="bookName" placeholder="请输入书籍名称" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+
+          nHtml+='<div class="layui-form-item">'
+          nHtml+= '<label class="layui-form-label">字数</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+='<input type="number" name="numberWorders" id="numberWorders" placeholder="请输入字数" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+
+          nHtml+='<div class="layui-form-item">'
+          nHtml+= '<label class="layui-form-label">章节标题</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+='<input type="text" name="title" id="title" lay-verify="title" placeholder="请输入章节标题" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+
+          nHtml+='<div class="layui-form-item">'
+          nHtml+= '<label class="layui-form-label">章节序号</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+='<input type="number" name="sort" id="sort" lay-verify="sort" placeholder="请输入章节序号" autocomplete="off" class="layui-input">'
+          nHtml+='</div>'
+          nHtml+='</div>'
+
+          nHtml+='<div class="layui-form-item">'
+          nHtml+= '<label class="layui-form-label">章节内容</label>'
+          nHtml+='<div class="layui-input-inline">'
+          nHtml+='<textarea  name="content" id="content" lay-verify="content" placeholder="请输入章节内容" autocomplete="off" class="layui-textarea"></textarea>'
+          nHtml+='</div>'
+          nHtml+='</div>'
 
           return nHtml;
       }
@@ -362,6 +466,7 @@
               var $row = JSON.stringify(item).replace(/\"/g,"'");
               tBodyHtml+='<td><button type="button" class="layui-btn layui-btn-normal float-left mb-1" onclick="updateBook('+$row+')" >修改</button>'
               tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="uploadChapter('+$row+')">新增章节</button>'
+              tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="updateChapter('+$row+')">修改章节</button>'
               tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="typeBook('+$row+')">分类</button>'
               tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteBook('+$row+')">刪除</button></td>'
               tBodyHtml+='</tr>'
@@ -458,8 +563,36 @@
         let html = pjBook();
         alertcomfirm2("addBookLayer","添加书籍",html,"addBookVerify",'#publicationTime',validateAddBook,ajaxAddBook,rowList,getFormData)
       }
-      function uploadChapter(){
-        
+      //新增章节
+      function uploadChapter(row){
+        console.log("章节",row)
+        let html = pjChapter(row);
+        let rowList = {
+            id:"",
+            bookId:row.id,
+            bookName:row.name,
+            numberWorders:"",
+            title:"",
+            sort:"",
+            content:""
+        }
+        alertcomfirm2("uploadChapterLayer","新增章节",html,"uploadChapterVerify",null,validateUploadChapter,ajaxUploadChapter,rowList,getChapterData)
+      }
+      //修改章节
+      function updateChapter(row) {
+          console.log("章节",row)
+          let html = pjUpdateChapter(row);
+          let rowList = {
+              id:"",
+              bookId:row.id,
+              bookName:row.name,
+              numberWorders:"",
+              title:"",
+              sort:"",
+              content:""
+          }
+          alertcomfirm2("uploadChapterLayer","新增章节",html,"uploadChapterVerify",null,validateUploadChapter,ajaxUploadChapter,rowList,getChapterData)
+
       }
       function updateBook(rowList){
         let html = pjBook();
@@ -483,6 +616,15 @@
           document.getElementById("typeName").value=rowList.typeName;
       }
       //渲染後設置值獲取數據(修改的數據打開在這裡賦值)
+      function getChapterData(rowList){
+          document.getElementById("id").value=rowList.id;
+          document.getElementById("bookId").value=rowList.bookId;
+          document.getElementById("bookName").value=rowList.bookName;
+          document.getElementById("numberWorders").value=rowList.numberWorders;
+          document.getElementById("title").value=rowList.title;
+          document.getElementById("sort").value=rowList.sort;
+          document.getElementById("content").value=rowList.content;
+      }
       function getFormData(rowList){
         document.getElementById("id").value=rowList.id;
         document.getElementById("name").value=rowList.name;
@@ -536,6 +678,9 @@
 
 
       }
+      function validateUploadChapter() {
+
+      }
       function validateAddBook(form){
               var form = layui.form;
               form.verify({
@@ -563,6 +708,16 @@
           axios(addBook).then(res=>{
               alertLayer("编辑书籍","新增成功",closeForm);
           }).catch(err=>{alertLayer2("编辑书籍",err);})
+      }
+      function ajaxUploadChapter(data) {
+        let addChapter={
+            url:ip+"chapter",
+            method:"POST",
+            data:data
+        }
+          axios(addChapter).then(()=>{
+              alertLayer("新增章节","新增成功",closeForm);
+      }).catch(err=>{alertLayer2("新增章节",err)})
       }
       function  addUser() {
           let rowList = {

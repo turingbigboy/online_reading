@@ -1,5 +1,6 @@
 package com.yyjj.reading.api.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yyjj.reading.db.model.Chapter;
 import com.yyjj.reading.service.bo.ChapterBO;
 import lombok.Getter;
@@ -61,7 +62,8 @@ public class ChapterVO implements Serializable {
 	/**
 	 * 创建时间
 	 */
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime createTime;
      
     public static ChapterVO newInstance(Chapter chapter) {

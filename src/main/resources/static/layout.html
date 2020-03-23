@@ -104,14 +104,14 @@
             //初始化
             $(function() {
               //验证是否登录，登录则显示用户信息，否则显示登录信息
-              ifLogin();
-              initIP();
+              init()
+
             });
-            function initIP(){
-              const ip = "http://localhost:8080/online_reading/"
-              return ip;
+            function init() {
+                ifLogin();
             }
             function showPerson(){
+                console.log("Person")
               let s = document.getElementById("showLogout")
               s.style.visibility = ""
             }
@@ -125,14 +125,22 @@
               parentListen();
             }
             function realLogout(){
-              sessionStorage.removeItem("status")
-              layer.closeAll()
-              ifLogin();
-              returnParentListen();
+              let logout={
+                  url:ip+"user/logout",
+                  method:"GET",
+                  params:""
+              }
+              axios(logout).then(()=>{
+                  alertLayer("","你已退出登录",closeForm);
+                  sessionStorage.removeItem("status")
+                  // layer.closeAll();
+                  // ifLogin();
+                  // returnParentListen();
+              })
+
             }
             //用户是否登录  status：0.未登录  1.已登陆
             function ifLogin(){
-              //TODO  sessionStorage.setItem("status", 0);放在login方法里
               // sessionStorage.setItem("status", 0);
               var value = sessionStorage.getItem("status");
               console.log(value)
@@ -196,21 +204,34 @@
                 init();
             }
             function ajaxLogin(data){
-                //TODO 登录
-                // let login={
-                //     url:ip+"user/login",
-                //     method:"POST",
-                //     data:data
-                // }
-                // axios(login).then(data=>{
-                //     alertLayer2("登录","登录成功");
-                // }).catch(err=>{alertLayer2("编辑用户",err)})
-              console.log(data)
+                let params={
+                    account:data.lusername,
+                    password:data.lpassword
+                }
+                let login={
+                    url:ip+"user/login",
+                    method:"POST",
+                    data:params
+                }
+                axios(login).then((data)=>{
+                    if(data.data.code==0||data.data.code=="0"){
+                    alertLayer("登录","登录成功",successLogin);
+                    // returnParentListen();
+                }else{
+                    alertLayer2("登录",data.data.msg)
+                }
+
+                    // layer.closeAll()
+                    // ifLogin()
+                }).catch(err=>{alertLayer2("登录",err)})
               //如果成功，將status寫入session
-              sessionStorage.setItem("status", 1);
-              returnParentListen();
-              layer.closeAll()
-              ifLogin()
+              // sessionStorage.setItem("status", 1);
+
+            }
+            function successLogin() {
+                sessionStorage.setItem("status", 0);
+                closeForm();
+                // showPerson();
             }
             function ajaxRegister(data){
               console.log("ajaxRegister",data)
@@ -226,7 +247,6 @@
               $("#test").toggleClass("blue")
             }
             function clickTitle(){
-              const ip = initIP();
               let indexUrl = ip+"index.html"
               if(parent.location.href != indexUrl){
                 parent.location.href = indexUrl
@@ -235,7 +255,6 @@
               }
             }
             function toMyShelf(){
-              const ip = initIP();
               let myShelfUrl = ip+"MyShelf.html";
               console.log("書架地址",myShelfUrl)
               if(parent.location.href != myShelfUrl){

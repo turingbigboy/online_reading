@@ -2,10 +2,13 @@ function alertLayer(title,content,callback){
     layer.open({
         title: title
         ,content: content
-        ,btn: ['确定', '取消']
+        ,btn: ['确定']
         ,yes: function(index, layero){
             callback()
         },
+        cancel: function(index, layero){
+        callback()
+    },
     });
 
 }
@@ -34,6 +37,7 @@ function alertForm(title,id,callback){
     }
     function quesForm(content,callback,data){
       layer.confirm(content, {
+        offset: '200px',
         btn: ['確定','取消'] //按钮
         ,cancel: function(index, layero){
         returnParentListen();
@@ -56,7 +60,8 @@ function alertForm(title,id,callback){
         validateMethod(form)
         layer.open({
         //type：1  這樣才不會在數據驗證失敗後關閉彈出層
-        type:1,   
+        type:1,
+        offset: '200px',
         area: '350px',
         title:title,
         id:id,
@@ -144,7 +149,7 @@ function alertForm(title,id,callback){
         //點擊確定
         yes: function(index, layero){
         form.on('submit('+layFilter+')', function (data) {
-        //TODO   ajax 
+        //TODO   ajax
         ajaxMethod(data.field)
         console.log("yes")
         return false

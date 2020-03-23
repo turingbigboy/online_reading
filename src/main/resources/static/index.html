@@ -10,34 +10,16 @@
     <script type="text/javascript" src="./js/swiper.min.js"></script>
     <script type="text/javascript" src="./js/common.js"></script>
 </head>
-<body >
-  
-    <iframe id="frame-content" MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no src="./layout.html" width="100%"  height="900px"></iframe> 
+<body id="body" class="body">
+    <div id="allContent">
+    <iframe id="frameContent" MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no src="./layout.html" width="100%"  height="100%"></iframe>
     <div class="main" id="main">
         <div>
           <div class="center">
             <input type="text" name="bookSearch" placeholder="请输入书名或作者搜索" autocomplete="off" class="layui-input search">
             <span><button class="layui-btn layui-btn-primary border-0"><i class="layui-icon layui-icon-search"></i></button></i></span>
+          </div>
         </div>
-            <!--面包屑-->
-            <!-- <ul class="layui-nav test" lay-filter="">
-               <li class="layui-nav-item"><a href="">首页</a></li>
-               <li class="layui-nav-item layui-this"><a href="">玄幻魔法</a></li>
-               <li class="layui-nav-item"><a href="">武侠修真</a></li>
-               <li class="layui-nav-item">
-                 <a href="javascript:;">都市言情</a>
-                 <dl class="layui-nav-child"> 
-                   <dd><a href="">历史军事</a></dd>
-                   <dd><a href="">侦探推理</a></dd>
-                   <dd><a href="">网游动漫</a></dd>
-                 </dl>
-               </li>
-               <li class="layui-nav-item"><a href="">社区</a></li>
-             </ul> -->
-           <!--面包屑 end-->
-      </div>
-
-      
         <!--上面部分 end-->
         <!--轮播图-->
         <div>
@@ -80,12 +62,15 @@
             </div>
         </div>
     </div>
+        </div>
 
       
         <!--轮播图 end-->
         <script>
             //初始化
             $(function() {
+              //重新给一个宽度给iframe
+              reInitFrameWidth();
               //验证是否登录，登录则显示用户信息，否则显示登录信息
               getCarouselItem();
               getNewBook();
@@ -93,6 +78,14 @@
               initSwiper();
               returnZindex();
             });
+            function reInitFrameWidth() {
+                // frame-content
+                let screenHeight = window.screen.height;
+                var scrollHeight=document.getElementById("main").scrollHeight;
+                var scrollHeight2=document.getElementById("frameContent").scrollHeight;
+                var dom=$("#frameContent")[0]
+                dom.height = scrollHeight+scrollHeight2+"px";
+            }
             //layer的問題，需要改變zindex並且在調用彈出窗口時（登錄和退出時）改變z-index
             function changeZindex(){
               let dom = document.getElementById("main")
@@ -324,10 +317,13 @@
   top: 60px;
   width: 96%;
   margin-left: 2%;
-  height: 80%;
+  height: 100%;
   z-index: -1;
   /* overflow-y: auto; */
   /* overflow-x: hidden; */
 }
+    .body{
+        /*background: red;*/
+    }
 </style>
 </html>
