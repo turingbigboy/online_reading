@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.*;
 
 import java.io.File;
@@ -85,6 +88,23 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 				break;
 			}
 		}
+	}
+	@Bean
+	public CorsConfiguration corsConfiguration() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		//实际请求中允许携带的首部字段
+		corsConfiguration.addAllowedHeader("*");
+		//允许那些域跨域访问
+		corsConfiguration.addAllowedOrigin("*");
+		//允许那些请求方法
+		corsConfiguration.addAllowedMethod("*");
+		return corsConfiguration;
+	}
+	@Bean
+	public CorsFilter corsFilter(CorsConfiguration corsConfiguration) {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfiguration); // 4
+		return new CorsFilter(source);
 	}
 	
 	@Override

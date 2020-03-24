@@ -133,12 +133,12 @@
         nHtml+='</div>'
         nHtml+='</div>'
 
-        nHtml+='<div class="layui-form-item">'
-        nHtml+= '<label class="layui-form-label">字数</label>'
-        nHtml+='<div class="layui-input-inline">'
-        nHtml+='<input type="text" name="numberWorders" id="numberWorders" placeholder="请输入字数" autocomplete="off" class="layui-input">'
-        nHtml+='</div>'
-        nHtml+='</div>'
+        // nHtml+='<div class="layui-form-item" style="display: none">'
+        // nHtml+= '<label class="layui-form-label">字数</label>'
+        // nHtml+='<div class="layui-input-inline">'
+        // nHtml+='<input type="text" name="numberWorders" id="numberWorders" placeholder="请输入字数" autocomplete="off" class="layui-input">'
+        // nHtml+='</div>'
+        // nHtml+='</div>'
 
         nHtml+='<div class="layui-form-item">'
         nHtml+= '<label class="layui-form-label">封面</label>'
@@ -240,12 +240,12 @@
         nHtml+='</div>'
         nHtml+='</div>'
 
-        nHtml+='<div class="layui-form-item">'
-        nHtml+= '<label class="layui-form-label">字数</label>'
-        nHtml+='<div class="layui-input-inline">'
-        nHtml+='<input type="number" name="numberWorders" id="numberWorders" placeholder="请输入字数" autocomplete="off" class="layui-input">'
-        nHtml+='</div>'
-        nHtml+='</div>'
+        // nHtml+='<div class="layui-form-item" style="display: none">'
+        // nHtml+= '<label class="layui-form-label">字数</label>'
+        // nHtml+='<div class="layui-input-inline">'
+        // nHtml+='<input type="number" name="numberWorders" id="numberWorders" placeholder="请输入字数" autocomplete="off" class="layui-input">'
+        // nHtml+='</div>'
+        // nHtml+='</div>'
 
         nHtml+='<div class="layui-form-item">'
         nHtml+= '<label class="layui-form-label">章节标题</label>'
@@ -255,7 +255,7 @@
         nHtml+='</div>'
 
         nHtml+='<div class="layui-form-item">'
-        nHtml+= '<label class="layui-form-label">章节序号</label>'
+        nHtml+='<label class="layui-form-label">章节序号</label>'
         nHtml+='<div class="layui-input-inline">'
         nHtml+='<input type="number" name="sort" id="sort" lay-verify="sort" placeholder="请输入章节序号" autocomplete="off" class="layui-input">'
         nHtml+='</div>'
@@ -292,12 +292,12 @@
           nHtml+='</div>'
           nHtml+='</div>'
 
-          nHtml+='<div class="layui-form-item">'
-          nHtml+= '<label class="layui-form-label">字数</label>'
-          nHtml+='<div class="layui-input-inline">'
-          nHtml+='<input type="number" name="numberWorders" id="numberWorders" placeholder="请输入字数" autocomplete="off" class="layui-input">'
-          nHtml+='</div>'
-          nHtml+='</div>'
+          // nHtml+='<div class="layui-form-item" style="display: none">'
+          // nHtml+= '<label class="layui-form-label">字数</label>'
+          // nHtml+='<div class="layui-input-inline">'
+          // nHtml+='<input type="number" name="numberWorders" id="numberWorders" placeholder="请输入字数" autocomplete="off" class="layui-input">'
+          // nHtml+='</div>'
+          // nHtml+='</div>'
 
           nHtml+='<div class="layui-form-item">'
           nHtml+= '<label class="layui-form-label">章节标题</label>'
@@ -426,7 +426,7 @@
               {name:"出版社",key:'publishingHouse'},
               {name:"出版時間",key:'publicationTime'},
               {name:'简介',key:'synopsis'},
-              {name:'字数',key:'numberWorders'},
+              // {name:'字数',key:'numberWorders'},
               {name:'封面',key:'cover'},
               {name:'状态',key:'status'},
               {name:'创建时间',key:'createTime'},
@@ -448,7 +448,7 @@
                   thHtml+='<th>'+title.name+'</th>'
               }
           }
-          thHtml+='<th style="width:400px">操作</th>'
+          thHtml+='<th style="width:550px">操作</th>'
           $("#thId").html(thHtml);
           for(let item of bookJson){
               tBodyHtml+='<tr>'
@@ -468,6 +468,7 @@
               tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="uploadChapter('+$row+')">新增章节</button>'
               tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="updateChapter('+$row+')">修改章节</button>'
               tBodyHtml+='<button type="button" class="layui-btn mb-1" onclick="typeBook('+$row+')">分类</button>'
+              tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger mb-1" onclick="deleteChapter('+$row+')">删除章节</button>'
               tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteBook('+$row+')">刪除</button></td>'
               tBodyHtml+='</tr>'
           }
@@ -556,7 +557,7 @@
           author: "",
           publishingHouse: "",
           synopsis: "",
-          numberWorders:"",
+          // numberWorders:"",
           cover:"",
           status:""
         }
@@ -571,7 +572,7 @@
             id:"",
             bookId:row.id,
             bookName:row.name,
-            numberWorders:"",
+            // numberWorders:"",
             title:"",
             sort:"",
             content:""
@@ -586,7 +587,7 @@
               id:"",
               bookId:row.id,
               bookName:row.name,
-              numberWorders:"",
+              // numberWorders:"",
               title:"",
               sort:"",
               content:""
@@ -620,10 +621,13 @@
           document.getElementById("id").value=rowList.id;
           document.getElementById("bookId").value=rowList.bookId;
           document.getElementById("bookName").value=rowList.bookName;
-          document.getElementById("numberWorders").value=rowList.numberWorders;
+          // document.getElementById("numberWorders").value=rowList.content.split("").length;
           document.getElementById("title").value=rowList.title;
           document.getElementById("sort").value=rowList.sort;
           document.getElementById("content").value=rowList.content;
+      }
+      function getChapterDelete() {
+
       }
       function getFormData(rowList){
         document.getElementById("id").value=rowList.id;
@@ -632,13 +636,39 @@
         document.getElementById("status").value=rowList.status;
         document.getElementById("publishingHouse").value=rowList.publishingHouse;
         document.getElementById("synopsis").value=rowList.synopsis;
-        document.getElementById("numberWorders").value=rowList.numberWorders;
+        // document.getElementById("numberWorders").value=rowList.numberWorders;
         document.getElementById("cover").value=rowList.cover;
         document.getElementById("publicationTime").value=rowList.publicationTime;
       }
       function deleteBook(rowList){
         console.log(rowList)
         quesForm("你確定要刪除嗎？",deleteBookAjax,rowList)
+      }
+      function deleteChapter(rowList) {
+          //获取书籍指定章节
+          let getBookChapter={
+              url:ip+"chapter/"+rowList.id,
+              method:"GET"
+          }
+          axios(getBookChapter).then(data=>{
+              let bookChapterJson = data.data.data.records;
+              var nHtml='<div class="layui-form-item">'
+              nHtml+='<label class="layui-form-label">章节</label>'
+              nHtml+='<div class="layui-input-block">'
+              nHtml+='<select name="id" id="id" lay-verify="id">'
+              nHtml+='<option value="">---请选择---</option>'
+              for(let item of bookChapterJson){
+                  nHtml+='<option value='+item.id+'>'+item.title+'</option>'
+              }
+              nHtml+='</select>'
+              nHtml+='</div>'
+              nHtml+='</div>'
+
+              alertcomfirm2("deleteChapterLayer","删除书籍",nHtml,"deleteChapterVerify",null,validateChapterDelete,ajaxDeleteChapter,null,getChapterDelete)
+
+      })
+
+
       }
       function typeBook(row) {
           //获取所有type
@@ -681,6 +711,9 @@
       function validateUploadChapter() {
 
       }
+      function validateChapterDelete() {
+
+      }
       function validateAddBook(form){
               var form = layui.form;
               form.verify({
@@ -709,7 +742,19 @@
               alertLayer("编辑书籍","新增成功",closeForm);
           }).catch(err=>{alertLayer2("编辑书籍",err);})
       }
+      function ajaxDeleteChapter(data){
+          console.log(data)
+          let deleteChapterParam={
+              url:ip+"chapter/"+data.id,
+              method:"delete"
+          }
+          axios(deleteChapterParam).then(()=>{
+              alertLayer("删除章节","删除成功",closeForm);
+      }).catch(err=>{alertLayer2("删除章节",err)})
+      }
       function ajaxUploadChapter(data) {
+          // console.log(666,data.content.split("").length)
+          // data.numberWorders = data.content.split("").length;
         let addChapter={
             url:ip+"chapter",
             method:"POST",

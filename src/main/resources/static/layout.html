@@ -100,7 +100,7 @@
         <!--註冊 end-->
         <!--轮播图 end-->
         <script>
-            var ip = "http://localhost:8080/online_reading/";
+            var ip = initIP()
             //初始化
             $(function() {
               //验证是否登录，登录则显示用户信息，否则显示登录信息
@@ -121,38 +121,35 @@
             }
            
             function logout(){
-              quesForm('你確定要退出登錄嗎?',realLogout)
-              parentListen();
+                realLogout();
             }
             function realLogout(){
-              let logout={
+                parentListen();
+              let logoutMethod={
                   url:ip+"user/logout",
                   method:"GET",
                   params:""
               }
-              axios(logout).then(()=>{
-                  alertLayer("","你已退出登录",closeForm);
-                  sessionStorage.removeItem("status")
-                  // layer.closeAll();
-                  // ifLogin();
-                  // returnParentListen();
+              axios(logoutMethod).then(()=>{
+                  // alertLayer("","退出成功",successLogout);
+                alertLayer("","退出成功",successLogout);
               })
-
             }
+
             //用户是否登录  status：0.未登录  1.已登陆
             function ifLogin(){
               // sessionStorage.setItem("status", 0);
               var value = sessionStorage.getItem("status");
               console.log(value)
-              if(!value){
-                document.getElementById("notLogin").style.display="";//显
-                document.getElementById("logged").style.display="none";//隱
-                // layer.msg('你已退出登錄', {icon: 2})
-                
+              if(value==1||value=="1"){
+                  document.getElementById("notLogin").style.display="none";//隐
+                  document.getElementById("logged").style.display="";//显
+                  // layer.msg('登錄成功', {icon: 1})
               }else{
-                document.getElementById("notLogin").style.display="none";//隐
-                document.getElementById("logged").style.display="";//显
-                // layer.msg('登錄成功', {icon: 1})
+                  document.getElementById("notLogin").style.display="";//显
+                  document.getElementById("logged").style.display="none";//隱
+                  // layer.msg('你已退出登錄', {icon: 2})
+
               }   
             }
             //登錄表單驗證
@@ -194,7 +191,6 @@
 
             function clickLogin(){
               alertcomfirm("loginLayer","登录","#loginId",'loginVerify',validateLogin,ajaxLogin)
-              
             }
             function clickRegister(){
               alertcomfirm("registerLayer","註冊","#registerId",'registerVerify',validateRegister,ajaxRegister)
@@ -229,18 +225,33 @@
 
             }
             function successLogin() {
-                sessionStorage.setItem("status", 0);
+                sessionStorage.setItem("status", 1);
+                returnParentListen();
                 closeForm();
                 // showPerson();
+            }
+            function successLogout() {
+                sessionStorage.setItem("status", 0);
+                // returnParentListen();
+                closeForm();
             }
             function ajaxRegister(data){
               console.log("ajaxRegister",data)
               if(data.rpassword!==data.rcheckPassword){
                 layer.msg('兩次輸入的密碼不一致', {icon: 5});
                 return false;
+              }else{
+                  let register={
+                      url:ip+"user/register",
+                      method:"POST",
+                      data:data
+                  }
+                  axios(register).then(()=>{
+                      alertLayer("注册","注册成功",closeForm);
+                  }).catch(err=>{alertLayer("注册","注册失败",closeForm)})
+
               }
-              returnParentListen();
-              layer.closeAll()
+
 
             }
             function testId(){

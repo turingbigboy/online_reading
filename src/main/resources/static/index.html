@@ -9,6 +9,7 @@
     <script type="text/javascript" src="./layui/layui/dist/layui.all.js"></script>
     <script type="text/javascript" src="./js/swiper.min.js"></script>
     <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/axios.js"></script>
 </head>
 <body id="body" class="body">
     <div id="allContent">
@@ -67,6 +68,7 @@
       
         <!--轮播图 end-->
         <script>
+            var ip = initIP();
             //初始化
             $(function() {
               //重新给一个宽度给iframe
@@ -277,30 +279,38 @@
               $("#newBook").html(nHtml);
             }
             function getCategory(){
-              let categoryJson=["历史军事","武侠修真","其他类型","网游动漫","都市言情","都市言情","都市言情","都市言情","玄幻魔法"]
-              let nHtml = ""
-              for(let i=1;i+1<=categoryJson.length;i++){
-                let item = categoryJson[i-1];
-                let item2 = categoryJson[i];
-                i++;
-                if(parseInt((i-1)/2)%2==0){
-                  nHtml+='<div class="b1">'
-                }else{
-                  nHtml+='<div class="b2">'
+                let allType = {
+                    url:ip+"type",
+                    method:"GET",
                 }
-                //TODO  需要修改分类的地址
-                nHtml+='<div class="cateItem center">'+'<a href="http://www.baidu.com">'+item+'</a>'+'</div>';
-                nHtml+='<div class="cateItem center">'+'<a href="http://www.baidu.com">'+item2+'</a>'+'</div>';
-                nHtml+='</div>'
-                //为奇数且为最后一个节点时
-                if(i+1==categoryJson.length){
-                  let item3 = categoryJson[i];
-                  nHtml+='<div class="b1">'
-                  nHtml+='<div class="cateItem center">'+'<a href="http://www.baidu.com">'+item3+'</a>'+'</div>';
-                  nHtml+='</div>'
-                  }
-                }
-                $("#category").html(nHtml);
+                axios(allType).then(data=>{
+                    let categoryJson = data.data.data.records;
+                    let nHtml = ""
+                    for(let i=1;i+1<=categoryJson.length;i++){
+                        let item = categoryJson[i-1].typeName;
+                        let item2 = categoryJson[i].typeName;
+                        i++;
+                        if(parseInt((i-1)/2)%2==0){
+                            nHtml+='<div class="b1">'
+                        }else{
+                            nHtml+='<div class="b2">'
+                        }
+                        //TODO  需要修改分类的地址
+                        nHtml+='<div class="cateItem center">'+'<a href='+ip+''+"menu.html"+'>'+item+'</a>'+'</div>';
+                        nHtml+='<div class="cateItem center">'+'<a href='+ip+''+"menu.html"+'>'+item2+'</a>'+'</div>';
+                        nHtml+='</div>'
+                        //为奇数且为最后一个节点时
+                        if(i+1==categoryJson.length){
+                            let item3 = categoryJson[i].typeName;
+                            nHtml+='<div class="b1">'
+                            nHtml+='<div class="cateItem center">'+'<a href='+ip+''+"menu.html"+'>'+item3+'</a>'+'</div>';
+                            nHtml+='</div>'
+                        }
+                    }
+                    $("#category").html(nHtml);
+                })
+              // let categoryJson=["历史军事","武侠修真","其他类型","网游动漫","都市言情","都市言情","都市言情","都市言情","玄幻魔法"]
+
             }
         </script>
 </body>
