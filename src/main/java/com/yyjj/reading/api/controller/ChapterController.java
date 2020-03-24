@@ -44,7 +44,8 @@ public class ChapterController {
 	 */
 	@GetMapping("{bookId:\\d+}")
 	public AjaxResult<ChapterVO> listBasePage(@PathVariable Integer bookId, ChapterVO vo){
-		return AjaxResult.success("",chapterService.listPage(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId,bookId)).converterAll(this::convert));
+		return AjaxResult.success("",chapterService.listPage(new QueryWrapper<Chapter>().lambda()
+				.eq(Chapter::getBookId,bookId).orderByAsc(Chapter::getSort)).converterAll(this::convert));
 	}
 	
 	/**

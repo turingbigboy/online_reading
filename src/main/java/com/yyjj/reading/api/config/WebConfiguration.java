@@ -100,6 +100,16 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 		corsConfiguration.addAllowedMethod("*");
 		return corsConfiguration;
 	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+				.allowedOrigins("*")
+				.allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+				.maxAge(3600)
+				.allowCredentials(true);
+	}
+
 	@Bean
 	public CorsFilter corsFilter(CorsConfiguration corsConfiguration) {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

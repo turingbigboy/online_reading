@@ -5,7 +5,9 @@ import com.yyjj.reading.api.vo.BookVO;
 import com.yyjj.reading.db.model.Book;
 import com.yyjj.reading.db.model.Chapter;
 import com.yyjj.reading.domain.context.AjaxResult;
+import com.yyjj.reading.domain.context.BasePageVOContextHolder;
 import com.yyjj.reading.domain.service.BasePage;
+import com.yyjj.reading.domain.service.BasePageVO;
 import com.yyjj.reading.service.service.BookService;
 import com.yyjj.reading.service.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,19 @@ public class BookController {
 	public AjaxResult<BookVO> Detail(@PathVariable Integer id) {
 		return AjaxResult.success("",BookVO.newInstance(bookService.getById(id)));
 	}
-	
+
+	/**
+	 * 新书推荐
+	 * @return
+	 */
+	@GetMapping("newbook-recommend")
+	public AjaxResult<BookVO> newBook(){
+		BasePageVO vo = new BasePageVO();
+		vo.setPage((long)1);
+		vo.setPageSize((long)3);
+		BasePageVOContextHolder.setBasePageVO(vo);
+		return AjaxResult.success("",bookService.listPage(new QueryWrapper<Book>().orderByDesc("create_time")).converterAll(this::convert));
+	}
 	
 	/**
 	 * 新增书籍
