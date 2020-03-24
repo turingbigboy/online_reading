@@ -12,7 +12,7 @@ public class BookBO implements IBaseBO<Book>{
 	
 	@Override
 	public void accpet(QueryWrapper<Book> queryWrapper) {
-		
+		queryWrapper.lambda().inSql(Book::getId,"select book_id from book_rack GROUP BY book_id  ORDER BY  count(*) DESC");
 	}
 	
 	public  Book convert() {
