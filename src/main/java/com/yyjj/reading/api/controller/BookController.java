@@ -8,6 +8,8 @@ import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.context.BasePageVOContextHolder;
 import com.yyjj.reading.domain.service.BasePage;
 import com.yyjj.reading.domain.service.BasePageVO;
+import com.yyjj.reading.service.bo.BookBO;
+import com.yyjj.reading.service.service.BookRackService;
 import com.yyjj.reading.service.service.BookService;
 import com.yyjj.reading.service.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,9 @@ public class BookController {
 	String imgPath;
 	@Autowired
 	ChapterService chapterService;
+	@Autowired
+	BookRackService bookrackService;
+
 	/**
 	 * 获取所有书籍
 	 * @param vo
@@ -74,7 +79,20 @@ public class BookController {
 		BasePageVOContextHolder.setBasePageVO(vo);
 		return AjaxResult.success("",bookService.listPage(new QueryWrapper<Book>().orderByDesc("create_time")).converterAll(this::convert));
 	}
-	
+
+	/**
+	 * top榜
+	 * @return
+	 */
+	@GetMapping("top")
+	public AjaxResult<BookVO> top(){
+		BasePageVO vo = new BasePageVO();
+		vo.setPage((long)1);
+		vo.setPageSize((long)3);
+		return AjaxResult.success("",bookService.listSearch(new Book(),new BookBO(),vo).converterAll(this::convert));
+	}
+
+
 	/**
 	 * 新增书籍
 	 * @param vo

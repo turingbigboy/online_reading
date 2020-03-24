@@ -43,8 +43,7 @@ public class BookTypeController {
 	 */
 	@GetMapping("{id:\\d+}")
 	public AjaxResult<BookTypeVO> listBasePage(@PathVariable Integer id,BookTypeVO vo){
-		return 	AjaxResult.success("",booktypeService.listPage(new QueryWrapper<BookType>(vo.convert()).lambda().eq(BookType::getTypeId,id)).converterAll(this::convert));
-
+		return 	AjaxResult.success("",booktypeService.listPage(new QueryWrapper<BookType>().lambda().eq(BookType::getTypeId,id)).converterAll(this::convert));
 	}
 	
 
