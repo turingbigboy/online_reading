@@ -59,7 +59,15 @@ public class BookController {
 	public AjaxResult<BookVO> Detail(@PathVariable Integer id) {
 		return AjaxResult.success("",BookVO.newInstance(bookService.getById(id)));
 	}
-	
+
+	/**
+	 * 新书推荐
+	 * @return
+	 */
+	@GetMapping("newbook-recommend")
+	public AjaxResult<BookVO> newBook(){
+		return AjaxResult.success("",bookService.listPage(new QueryWrapper<Book>().orderByDesc("create_time")).converterAll(this::convert));
+	}
 	
 	/**
 	 * 新增书籍
