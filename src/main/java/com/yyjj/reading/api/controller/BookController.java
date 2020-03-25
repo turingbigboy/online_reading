@@ -100,11 +100,11 @@ public class BookController {
 	 * 
 	 */
 	@PostMapping
-	public AjaxResult<BookVO> add(MultipartFile image,@RequestBody @Validated BookVO vo) throws IOException {
+	public AjaxResult<BookVO> add(MultipartFile file,@RequestBody @Validated BookVO vo) throws IOException {
 		int nano = LocalDateTime.now().getNano();
-		if(Objects.nonNull(image)) {
-			image.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+image.getOriginalFilename()));
-			vo.setCover(imgPath+File.separator+"cover"+File.separator+nano+image.getOriginalFilename());
+		if(Objects.nonNull(file)) {
+			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));
+			vo.setCover(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
 		}
 		Book book = vo.convert();
 		Boolean result = bookService.save(book);
