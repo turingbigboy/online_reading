@@ -14,7 +14,6 @@ import com.yyjj.reading.service.service.BookService;
 import com.yyjj.reading.service.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -100,8 +99,8 @@ public class BookController {
 	 * 
 	 */
 	@PostMapping
-	public AjaxResult<BookVO> add(MultipartFile file,@RequestBody @Validated BookVO vo) throws IOException {
-		int nano = LocalDateTime.now().getNano();
+	public AjaxResult<BookVO> add(MultipartFile file,BookVO vo) throws IOException {
+			int nano = LocalDateTime.now().getNano();
 		if(Objects.nonNull(file)) {
 			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));
 			vo.setCover(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
@@ -123,11 +122,11 @@ public class BookController {
 	 * 
 	 */
 	@PutMapping
-	public AjaxResult modify(MultipartFile image,@RequestBody @Validated BookVO vo) throws IOException {
-		if(Objects.nonNull(image)) {
+	public AjaxResult modify(MultipartFile file,BookVO vo) throws IOException {
+		if(Objects.nonNull(file)) {
 			int nano = LocalDateTime.now().getNano();
-			image.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano +image.getOriginalFilename()));
-			vo.setCover(imgPath+File.separator+"cover"+File.separator+nano+image.getOriginalFilename());
+			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano +file.getOriginalFilename()));
+			vo.setCover(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
 		}
 		Book book = vo.convert();
 		Boolean result = bookService.updateById(book);
