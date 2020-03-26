@@ -3,6 +3,7 @@ package com.yyjj.reading.api.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yyjj.reading.api.vo.BookVO;
 import com.yyjj.reading.db.model.Book;
+import com.yyjj.reading.db.model.BookType;
 import com.yyjj.reading.db.model.Chapter;
 import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.context.BasePageVOContextHolder;
@@ -11,6 +12,7 @@ import com.yyjj.reading.domain.service.BasePageVO;
 import com.yyjj.reading.service.bo.BookBO;
 import com.yyjj.reading.service.service.BookRackService;
 import com.yyjj.reading.service.service.BookService;
+import com.yyjj.reading.service.service.BookTypeService;
 import com.yyjj.reading.service.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,7 +47,8 @@ public class BookController {
 	ChapterService chapterService;
 	@Autowired
 	BookRackService bookrackService;
-
+	@Autowired
+	BookTypeService bookTypeService;
 	/**
 	 * 获取所有书籍
 	 * @param vo
@@ -143,7 +146,7 @@ public class BookController {
 	 */
 	@DeleteMapping("/{id:\\d+}")
 	public AjaxResult remove(@PathVariable Integer id) {
-
+		bookTypeService.remove(new QueryWrapper<BookType>().lambda().eq(BookType::getBookId,id));
 		chapterService.remove(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId,id));
 		Boolean result = bookService.removeById(id);
 		if(result){
