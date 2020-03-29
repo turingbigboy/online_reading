@@ -3,21 +3,16 @@ package com.yyjj.reading.api.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yyjj.reading.api.vo.BookVO;
-import com.yyjj.reading.db.model.Book;
-import com.yyjj.reading.db.model.BookRack;
-import com.yyjj.reading.db.model.BookType;
-import com.yyjj.reading.db.model.Chapter;
+import com.yyjj.reading.db.model.*;
 import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.context.BasePageVOContextHolder;
 import com.yyjj.reading.domain.service.BasePage;
 import com.yyjj.reading.domain.service.BasePageVO;
 import com.yyjj.reading.service.bo.BookBO;
-import com.yyjj.reading.service.service.BookRackService;
-import com.yyjj.reading.service.service.BookService;
-import com.yyjj.reading.service.service.BookTypeService;
-import com.yyjj.reading.service.service.ChapterService;
+import com.yyjj.reading.service.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 /**
@@ -51,6 +47,8 @@ public class BookController {
 	BookRackService bookrackService;
 	@Autowired
 	BookTypeService bookTypeService;
+	@Autowired
+	TypeService typeService;
 	/**
 	 * 获取所有书籍
 	 * @param vo
@@ -63,7 +61,14 @@ public class BookController {
 		bo.setName(vo.getName());
 		return AjaxResult.success("",bookService.listSearch(new Book(),new BookBO()).converterAll(this::convert));
 	}
-
+	@GetMapping("/{bookId:\\d+}/types")
+    public AjaxResult bookTypeList(@PathVariable Integer bookId){
+		List<BookType> bookTypes = bookTypeService.lambdaQuery().eq(BookType::getBookId,bookId).list();
+		if(!CollectionUtils.isEmpty(bookTypes)) {
+		return AjaxResult.success("",typeService.lambdaQuery().in(Type::getId, bookTypes.stream().map(BookType::getTypeId).collect(Collectors.toList())).list());
+		}
+		return AjaxResult.success("",new ArrayList<>());
+	}
 	/**
 	 *获取指定书籍
 	 * @param id Bookid
