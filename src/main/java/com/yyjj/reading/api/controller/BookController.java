@@ -62,7 +62,7 @@ public class BookController {
 		BookBO bo = vo.BookBO();
 		bo.setType(vo.getType());
 		bo.setName(vo.getName());
-		return AjaxResult.success("",bookService.listSearch(new Book(),new BookBO()).converterAll(this::convert));
+		return AjaxResult.success("",bookService.listSearch(new Book(),bo).converterAll(this::convert));
 	}
 	@GetMapping("/{bookId:\\d+}/types")
     public AjaxResult bookTypeList(@PathVariable Integer bookId){

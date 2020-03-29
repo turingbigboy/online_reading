@@ -32,8 +32,8 @@ public class ReadingRecordController {
 	 */
 	@GetMapping("{userId:\\d+}")
 	public BasePage<ReadingRecordVO> listBasePage(@PathVariable Integer userId, ReadingRecordVO vo){
-		readingrecordService.listPage(new QueryWrapper<ReadingRecord>().lambda().eq(ReadingRecord::getUserId,userId)).converterAll(this::convert);
-		return null;
+		return 		readingrecordService.listPage(new QueryWrapper<ReadingRecord>().lambda().eq(ReadingRecord::getUserId,userId)).converterAll(this::convert);
+
 	}
 
 	/**
