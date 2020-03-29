@@ -7,12 +7,15 @@ import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.service.BasePage;
 import com.yyjj.reading.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +31,10 @@ import java.util.Objects;
 public class UserController {
 	@Autowired
 	UserService userService;
-
+	@Value("${upload.filePath}")
+	String filePath;
+	@Value("${upload.imagePath}")
+	String imgPath;
 	/**
 	 * 分页查询
 	 * @param vo
@@ -93,9 +99,15 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping("/register")
-	public AjaxResult<UserVO> register(@RequestBody User user) {
+	public AjaxResult<UserVO> register(MultipartFile file, User user) throws IOException {
+
 		User u = userService.lambdaQuery().eq(User::getAccount, user.getAccount()).one();
 		if(Objects.isNull(u)) {
+			int nano = LocalDateTime.now().getNano();
+			if(Objects.nonNull(file)) {
+				file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));
+				user.setIcon(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
+			}
 			userService.save(user);
 		}else {
 			return AjaxResult.failed("注册失败！账户名称重复");
@@ -117,15 +129,20 @@ public class UserController {
 
 	/**
 	 * 新增用户
-	 * @param vo
+	 * @param file
 	 * @return
 	 *
 	 */
 	@PostMapping
-	public AjaxResult<UserVO> add(@RequestBody @Validated UserVO vo) {
-		boolean result = userService.save(vo.convert());
+	public AjaxResult<UserVO> add(MultipartFile file, User user) throws IOException {
+		int nano = LocalDateTime.now().getNano();
+		if(Objects.nonNull(file)) {
+			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));
+			user.setIcon(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
+		}
+		boolean result = userService.save(user);
 		if(result) {
-			return AjaxResult.success("添加成功", UserVO.newInstance(userService.getById(vo.getId())));
+			return AjaxResult.success("添加成功", UserVO.newInstance(userService.getById(user.getId())));
 		}else {
 			return AjaxResult.failed("添加失败");
 		}
@@ -138,7 +155,12 @@ public class UserController {
 	 *
 	 */
 	@PutMapping
-	public AjaxResult<UserVO> modify(@RequestBody @Validated UserVO vo) {
+	public AjaxResult<UserVO> modify(MultipartFile file,UserVO vo) throws IOException {
+		int nano = LocalDateTime.now().getNano();
+		if(Objects.nonNull(file)) {
+			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));
+			vo.setIcon(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
+		}
 		boolean result = userService.updateById(vo.convert());
 		if(result) {
 			return AjaxResult.success("修改成功", UserVO.newInstance(userService.getById(vo.getId())));

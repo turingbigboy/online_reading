@@ -1,6 +1,7 @@
 package com.yyjj.reading.api.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yyjj.reading.api.vo.BookVO;
 import com.yyjj.reading.db.model.Book;
 import com.yyjj.reading.db.model.BookRack;
@@ -57,9 +58,12 @@ public class BookController {
 	 */
 	@GetMapping
 	public AjaxResult listBasePage(BookVO vo){
-		return AjaxResult.success("",bookService.listPage(new QueryWrapper<Book>(vo.convert())).converterAll(this::convert));
+		BookBO bo = vo.BookBO();
+		bo.setType(vo.getType());
+		bo.setName(vo.getName());
+		return AjaxResult.success("",bookService.listSearch(new Book(),new BookBO()).converterAll(this::convert));
 	}
-	
+
 	/**
 	 *获取指定书籍
 	 * @param id Bookid
@@ -92,6 +96,8 @@ public class BookController {
 		BasePageVO vo = new BasePageVO();
 		vo.setPage((long)1);
 		vo.setPageSize((long)3);
+		BookBO bo = new BookBO();
+		bo.setTypeName("TOP");
 		return AjaxResult.success("",bookService.listSearch(new Book(),new BookBO(),vo).converterAll(this::convert));
 	}
 
@@ -117,7 +123,38 @@ public class BookController {
 			return AjaxResult.failed("添加失败");
 		}
 	}
+	/**
+	 * 下架书籍
+	 * @param bookId
+	 * @return
+	 *
+	 */
+	@PutMapping("/disable/{bookId:\\d+}")
+	public AjaxResult disable(@PathVariable Integer bookId) throws IOException {
 
+		Boolean result = bookService.update(new UpdateWrapper<Book>().lambda().eq(Book::getId,bookId).set(Book::getStatus,0));
+		if(result){
+			return AjaxResult.success("下架成功",bookService.getById(bookId));
+		}else {
+			return AjaxResult.failed("下架失败");
+		}
+	}
+
+	/**
+	 * 上架书籍
+	 * @param bookId
+	 * @return
+	 *
+	 */
+	@PutMapping("/enable/{bookId:\\d+}")
+	public AjaxResult enable(@PathVariable Integer bookId) throws IOException {
+		Boolean result = bookService.update(new UpdateWrapper<Book>().lambda().eq(Book::getId,bookId).set(Book::getStatus,1));
+		if(result){
+			return AjaxResult.success("上架成功",bookService.getById(bookId));
+		}else {
+			return AjaxResult.failed("上架失败");
+		}
+	}
 
 	/**
 	 * 修改书籍信息

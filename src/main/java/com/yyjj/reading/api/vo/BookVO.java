@@ -74,6 +74,7 @@ public class BookVO implements Serializable {
 	/**
 	 * 创建时间
 	 */
+	private Integer type;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime createTime;
