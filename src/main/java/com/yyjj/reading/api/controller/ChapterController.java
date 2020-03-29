@@ -76,6 +76,7 @@ public class ChapterController {
 		rr.setBookName(book.getName());
 		rr.setBookAuthor(book.getAuthor());
 		rr.setBookCover(book.getCover());
+		rr.setChapterId(chapterId);
 		ReadingRecord readingrecord = readingrecordService.lambdaQuery().eq(ReadingRecord::getUserId,userId).eq(ReadingRecord::getBookId,chapter.getBookId()).one();
 		//一条新的阅读记录
 		if(Objects.isNull(readingrecord)){
