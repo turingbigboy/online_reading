@@ -3,6 +3,7 @@ package com.yyjj.reading.api.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yyjj.reading.api.vo.BookVO;
 import com.yyjj.reading.db.model.Book;
+import com.yyjj.reading.db.model.BookRack;
 import com.yyjj.reading.db.model.BookType;
 import com.yyjj.reading.db.model.Chapter;
 import com.yyjj.reading.domain.context.AjaxResult;
@@ -146,6 +147,7 @@ public class BookController {
 	 */
 	@DeleteMapping("/{id:\\d+}")
 	public AjaxResult remove(@PathVariable Integer id) {
+		bookrackService.remove(new QueryWrapper<BookRack>().lambda().eq(BookRack::getBookId,id));
 		bookTypeService.remove(new QueryWrapper<BookType>().lambda().eq(BookType::getBookId,id));
 		chapterService.remove(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId,id));
 		Boolean result = bookService.removeById(id);

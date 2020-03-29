@@ -192,19 +192,19 @@ public class VelocityEngineBuilder {
     private static void init(VelocityInfo info) {
     	String path = "G:\\turing\\项目\\客服\\reading\\src\\main\\java\\com\\yyjj\\reading\\service";
 
-       // createService(info,path);
+        createService(info,path);
 
       //  createAddVO(info, path);
 
        // createUpdateVO(info, path);
 
-     //   createVO(info, path);
+        createVO(info, path);
 
         createController(info, path);
 
-    //    createServiceImpl(info, path);
+        createServiceImpl(info, path);
 
-    //    createBO(info, path);
+        createBO(info, path);
     }
 
     private static void createBO(VelocityInfo info, String path) {

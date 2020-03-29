@@ -17,9 +17,9 @@ import java.util.Scanner;
 public class CodeGenerator {
 
 
-  static String datasourceUrl = "127.0.0.1";
+  static String datasourceUrl = "106.14.14.204";
   static String name = "root";
-  static String password = "123456";
+  static String password = "yyjj1314";
   
   static String ModuleName = "com.yyjj.reading";
   
