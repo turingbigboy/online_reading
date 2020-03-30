@@ -87,7 +87,7 @@ public class UserController {
 		}
 		userService.lambdaQuery().eq(User::getAccount, user.getAccount()).eq(User::getPassword, user.getPassword()).one();
 		if(u.getPassword().equals(user.getPassword())) {
-			request.getSession().setAttribute("user", UserVO.newInstance(u));
+			request.getSession().setAttribute("user", u);
 			return AjaxResult.success("登陆成功！欢迎您"+u.getName(), UserVO.newInstance(u));
 		}else {
 			return AjaxResult.failed("登陆失败！密码错误");
