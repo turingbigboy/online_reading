@@ -2,6 +2,7 @@ package com.yyjj.reading.api.controller;
 
 import com.yyjj.reading.api.vo.NodesVO;
 import com.yyjj.reading.db.model.Nodes;
+import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.service.BasePage;
 import com.yyjj.reading.service.service.NodesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,12 @@ import java.util.List;
 
 
 /**
- * Nodes
+ * 笔记
  * @author yml
  *
  */
 @RestController
-@RequestMapping("/Nodes")
+@RequestMapping("/nodes")
 public class NodesController {
 		
 	@Autowired
@@ -47,14 +48,20 @@ public class NodesController {
 	
 	
 	/**
-	 * Nodes
+	 * 新增笔记
 	 * @param vo
 	 * @return
 	 * 
 	 */
 	@PostMapping
-	public NodesVO add(@RequestBody @Validated NodesVO vo) {
-		return null;	
+	public AjaxResult<NodesVO> add(@RequestBody @Validated NodesVO vo) {
+		boolean result = nodesService.save(vo.convert());
+		if(result){
+			return  AjaxResult.success("新增成功");
+		}else {
+			return AjaxResult.failed("新增失败");
+		}
+		//return null;
 	}
 	
 	/**

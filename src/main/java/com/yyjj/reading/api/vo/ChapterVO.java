@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -63,7 +64,10 @@ public class ChapterVO implements Serializable {
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	private LocalDateTime createTime;
-     
+	/**
+	 * 笔记
+	 */
+	List<NodesVO> nodes;
     public static ChapterVO newInstance(Chapter chapter) {
         if(Objects.isNull( chapter)) {
   	    return null;

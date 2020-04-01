@@ -2,13 +2,16 @@ package com.yyjj.reading.api.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yyjj.reading.api.vo.ChapterVO;
+import com.yyjj.reading.api.vo.NodesVO;
 import com.yyjj.reading.db.model.Book;
 import com.yyjj.reading.db.model.Chapter;
+import com.yyjj.reading.db.model.Nodes;
 import com.yyjj.reading.db.model.ReadingRecord;
 import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.service.BasePage;
 import com.yyjj.reading.service.service.BookService;
 import com.yyjj.reading.service.service.ChapterService;
+import com.yyjj.reading.service.service.NodesService;
 import com.yyjj.reading.service.service.ReadingRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -36,6 +39,9 @@ public class ChapterController {
 
 	@Autowired
 	BookService bookService;
+
+	@Autowired
+	NodesService nodesService;
 	/**
 	 * 获取书籍的章节列表
 	 * @param vo
@@ -88,7 +94,14 @@ public class ChapterController {
 			readingrecord.setRedcordTime(LocalDateTime.now());
 			readingrecordService.updateById(readingrecord);
 		}
-		return AjaxResult.success("",convert(chapterService.getById(chapterId)));
+		ChapterVO vo = convert(chapterService.getById(chapterId));
+		List<Nodes> nodes = nodesService.lambdaQuery().eq(Nodes::getUserId,userId).eq(Nodes::getChapterId,chapterId).list();
+		List<NodesVO> nodesVOS  = new ArrayList<>();
+		for(Nodes node:nodes){
+			nodesVOS.add(NodesVO.newInstance(node));
+		}
+		vo.setNodes(nodesVOS);
+		return AjaxResult.success("",vo);
 	}
 	
 	/**
@@ -151,7 +164,7 @@ public class ChapterController {
 	}
 	private ChapterVO convert(Chapter chapter){
 			ChapterVO vo = ChapterVO.newInstance(chapter);
-			//TODO
+
 			return vo;
 	}
 	

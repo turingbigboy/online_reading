@@ -24,7 +24,7 @@ public class Nodes implements Serializable {
     /**
      * 章节id
      */
-    private Integer chapter;
+    private Integer chapterId;
 
     /**
      * 笔记起始位置
@@ -62,13 +62,7 @@ public class Nodes implements Serializable {
     public void setBookId(Integer bookId) {
         this.bookId = bookId;
     }
-    public Integer getChapter() {
-        return chapter;
-    }
 
-    public void setChapter(Integer chapter) {
-        this.chapter = chapter;
-    }
     public Integer getNodeBeginLocation() {
         return nodeBeginLocation;
     }
@@ -105,12 +99,20 @@ public class Nodes implements Serializable {
         this.userId = userId;
     }
 
+    public Integer getChapterId() {
+        return chapterId;
+    }
+
+    public void setChapterId(Integer chapterId) {
+        this.chapterId = chapterId;
+    }
+
     @Override
     public String toString() {
         return "Nodes{" +
             "id=" + id +
             ", bookId=" + bookId +
-            ", chapter=" + chapter +
+            ", chapterId=" + chapterId +
             ", nodeBeginLocation=" + nodeBeginLocation +
             ", nodeEndLocation=" + nodeEndLocation +
             ", nodeContent=" + nodeContent +

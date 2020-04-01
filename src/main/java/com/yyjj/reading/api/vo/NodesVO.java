@@ -22,7 +22,39 @@ import java.util.Objects;
 public class NodesVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+	private Integer id;
+
+	/**
+	 * 书籍id
+	 */
+	private Integer bookId;
+
+	/**
+	 * 章节id
+	 */
+	private Integer chapterId;
+
+	/**
+	 * 笔记起始位置
+	 */
+	private Integer nodeBeginLocation;
+
+	/**
+	 * 笔记结束位置
+	 */
+	private Integer nodeEndLocation;
+
+	/**
+	 * 笔记内容
+	 */
+	private String nodeContent;
+
+	private String comment;
+
+	/**
+	 * 用户id
+	 */
+	private Integer userId;
      
     public static NodesVO newInstance(Nodes nodes) {
         if(Objects.isNull( nodes)) {
