@@ -31,6 +31,9 @@ public class Nodes implements Serializable {
      */
     private Integer nodeBeginLocation;
 
+    private String startNode;
+
+    private String endNode;
     /**
      * 笔记结束位置
      */

@@ -43,7 +43,9 @@ public class NodesVO implements Serializable {
 	 * 笔记结束位置
 	 */
 	private Integer nodeEndLocation;
+	private String startNode;
 
+	private String endNode;
 	/**
 	 * 笔记内容
 	 */
