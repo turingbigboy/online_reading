@@ -13,6 +13,7 @@ import com.yyjj.reading.service.service.ChapterService;
 import com.yyjj.reading.service.service.NodesService;
 import com.yyjj.reading.service.service.ReadingRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,55 +69,73 @@ public class ChapterController {
 	 * @param userId 用户ID
 	 * @return
 	 */
-	@GetMapping("/read/{userId:\\d+}/{chapterId:\\d+}")
-	public AjaxResult<ChapterVO> readingDetail(@PathVariable Integer userId,@PathVariable Integer chapterId) {
+	@GetMapping("/read/{userId:\\d+}/{bookId:\\d+}")
+	public AjaxResult<ChapterVO> readingDetail(@PathVariable Integer userId,Integer chapterId,@PathVariable Integer bookId) {
+		//根据章节ID阅读章节
+		ChapterVO vo = null;
+		if (chapterId != null) {
+			//BasePage<Chapter> pages = chapterService.listPage(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId,bookId).orderByAsc(Chapter::getSort));
+			List<Chapter> chapters = chapterService.lambdaQuery().eq(Chapter::getBookId, bookId).orderByAsc(Chapter::getSort).list();
+			if (!CollectionUtils.isEmpty(chapters)) {
+				Long num = (long)0;
+				for (Chapter chap : chapters) {
+					num++;
+					if (chap.getId().equals(chapterId)) {
+						vo = convert(chap);
+						vo.setPage(num);
+					}
+				}
+			}
+		} else {
+			BasePage<Chapter> pages = chapterService.listPage(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId, bookId).orderByAsc(Chapter::getSort));
+			List<Chapter> list = pages.getRecords();
+			if (!CollectionUtils.isEmpty(list)) {
+				Chapter chapter1 = list.get(0);
+				vo = convert(chapter1);
+				vo.setPage(pages.getPage());
+			}
+		}
+		if(Objects.isNull(vo)) {
+			return AjaxResult.failed("没有下一章");
+		}
 
-
-	    //一条新的阅读记录
+		//一条新的阅读记录
 		ReadingRecord rr = new ReadingRecord();
 		rr.setUserId(userId);
 		rr.setRedcordTime(LocalDateTime.now());
-		Chapter chapter = chapterService.getById(chapterId);
-		rr.setChapterName(chapter.getTitle());
-		Book book = bookService.getById(chapter.getBookId());
-		rr.setBookId(chapter.getBookId());
+		rr.setChapterName(vo.getTitle());
+		Book book = bookService.getById(vo.getBookId());
+		rr.setBookId(vo.getBookId());
 		rr.setBookName(book.getName());
 		rr.setBookAuthor(book.getAuthor());
 		rr.setBookCover(book.getCover());
-		rr.setChapterId(chapterId);
-		ReadingRecord readingrecord = readingrecordService.lambdaQuery().eq(ReadingRecord::getUserId,userId).eq(ReadingRecord::getBookId,chapter.getBookId()).one();
+		rr.setChapterId(vo.getId());
+		ReadingRecord readingrecord = readingrecordService.lambdaQuery().eq(ReadingRecord::getUserId, userId).eq(ReadingRecord::getBookId, vo.getBookId()).one();
 		//一条新的阅读记录
-		if(Objects.isNull(readingrecord)){
+		if (Objects.isNull(readingrecord)) {
 			readingrecordService.save(rr);
-		}else{
+		} else {
 			//更新阅读记录
-			readingrecord.setChapterId(chapterId);
-			readingrecord.setChapterName(chapter.getTitle());
+			readingrecord.setChapterId(vo.getId());
+			readingrecord.setChapterName(vo.getTitle());
 			readingrecord.setRedcordTime(LocalDateTime.now());
 			readingrecordService.updateById(readingrecord);
 		}
-		ChapterVO vo = convert(chapterService.getById(chapterId));
-        //判断用户是否有副本
-		Nodes node = nodesService.lambdaQuery().eq(Nodes::getChapterId,chapterId).eq(Nodes::getUserId,userId).one();
-        if(Objects.nonNull(node)){
-            vo.setContent(node.getNodeContent());
-        }else{
-            Nodes nodes = new Nodes();
-            nodes.setChapterId(chapterId);
-            nodes.setUserId(userId);
-            nodes.setBookId(book.getId());
-            nodes.setNodeContent(vo.getContent());
-            nodesService.save(nodes);
-        }
-		//List<Nodes> nodes = nodesService.lambdaQuery().eq(Nodes::getUserId,userId).eq(Nodes::getChapterId,chapterId).list();
-		/*List<NodesVO> nodesVOS  = new ArrayList<>();
-		for(Nodes node:nodes){
-			nodesVOS.add(NodesVO.newInstance(node));
-		}*/
-		//vo.setNodes(nodesVOS);
-		return AjaxResult.success("",vo);
-	}
-	
+
+
+		Nodes node = nodesService.lambdaQuery().eq(Nodes::getChapterId, vo.getId()).eq(Nodes::getUserId, userId).one();
+		if (Objects.nonNull(node)) {
+			vo.setContent(node.getNodeContent());
+		} else {
+			Nodes nodes = new Nodes();
+			nodes.setChapterId(vo.getId());
+			nodes.setUserId(userId);
+			nodes.setBookId(book.getId());
+			nodes.setNodeContent(vo.getContent());
+			nodesService.save(nodes);
+		}
+		  return AjaxResult.success("", vo);
+		}
 	/**
 	 * 新增章节
 	 * @param vo 必传BookId
