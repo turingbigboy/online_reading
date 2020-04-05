@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -55,7 +56,14 @@ public class NodesController {
 	 */
 	@PostMapping
 	public AjaxResult<NodesVO> add(@RequestBody @Validated NodesVO vo) {
-		boolean result = nodesService.save(vo.convert());
+	    Nodes nodes  = nodesService.lambdaQuery().eq(Nodes::getChapterId,vo.getChapterId()).eq(Nodes::getUserId,vo.getUserId()).one();
+        boolean result = false;
+	    if(Objects.nonNull(nodes)){
+	        nodes.setNodeContent(vo.getNodeContent());
+            result =  nodesService.updateById(nodes);
+        }else {
+            result =  nodesService.save(vo.convert());
+        }
 		if(result){
 			return  AjaxResult.success("新增成功");
 		}else {

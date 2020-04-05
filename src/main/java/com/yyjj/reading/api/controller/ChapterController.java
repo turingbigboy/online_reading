@@ -2,7 +2,6 @@ package com.yyjj.reading.api.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yyjj.reading.api.vo.ChapterVO;
-import com.yyjj.reading.api.vo.NodesVO;
 import com.yyjj.reading.db.model.Book;
 import com.yyjj.reading.db.model.Chapter;
 import com.yyjj.reading.db.model.Nodes;
@@ -71,7 +70,9 @@ public class ChapterController {
 	 */
 	@GetMapping("/read/{userId:\\d+}/{chapterId:\\d+}")
 	public AjaxResult<ChapterVO> readingDetail(@PathVariable Integer userId,@PathVariable Integer chapterId) {
-		//一条新的阅读记录
+
+
+	    //一条新的阅读记录
 		ReadingRecord rr = new ReadingRecord();
 		rr.setUserId(userId);
 		rr.setRedcordTime(LocalDateTime.now());
@@ -95,12 +96,24 @@ public class ChapterController {
 			readingrecordService.updateById(readingrecord);
 		}
 		ChapterVO vo = convert(chapterService.getById(chapterId));
-		List<Nodes> nodes = nodesService.lambdaQuery().eq(Nodes::getUserId,userId).eq(Nodes::getChapterId,chapterId).list();
-		List<NodesVO> nodesVOS  = new ArrayList<>();
+        //判断用户是否有副本
+		Nodes node = nodesService.lambdaQuery().eq(Nodes::getChapterId,chapterId).eq(Nodes::getUserId,userId).one();
+        if(Objects.nonNull(node)){
+            vo.setContent(node.getNodeContent());
+        }else{
+            Nodes nodes = new Nodes();
+            nodes.setChapterId(chapterId);
+            nodes.setUserId(userId);
+            nodes.setBookId(book.getId());
+            nodes.setNodeContent(vo.getContent());
+            nodesService.save(nodes);
+        }
+		//List<Nodes> nodes = nodesService.lambdaQuery().eq(Nodes::getUserId,userId).eq(Nodes::getChapterId,chapterId).list();
+		/*List<NodesVO> nodesVOS  = new ArrayList<>();
 		for(Nodes node:nodes){
 			nodesVOS.add(NodesVO.newInstance(node));
-		}
-		vo.setNodes(nodesVOS);
+		}*/
+		//vo.setNodes(nodesVOS);
 		return AjaxResult.success("",vo);
 	}
 	
@@ -130,6 +143,7 @@ public class ChapterController {
 	@PutMapping
 	public AjaxResult<ChapterVO> modify(@RequestBody @Validated ChapterVO vo) {
 		Chapter chapter = vo.convert();
+		nodesService.remove(new QueryWrapper<Nodes>().lambda().eq(Nodes::getChapterId,vo.getId()));
 		Boolean result = chapterService.updateById(chapter);
 		if(result){
 			return  AjaxResult.success("修改成功",convert(chapterService.getById(chapter.getId())));
@@ -144,7 +158,8 @@ public class ChapterController {
 	 */
 	@DeleteMapping("/{id:\\d+}")
 	public AjaxResult remove(@PathVariable Integer id) {
-		Boolean result = chapterService.removeById(id);
+        nodesService.remove(new QueryWrapper<Nodes>().lambda().eq(Nodes::getChapterId,id));
+        Boolean result = chapterService.removeById(id);
 		if(result){
 			return  AjaxResult.success("删除成功");
 		}else {
