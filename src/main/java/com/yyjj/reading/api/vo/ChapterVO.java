@@ -68,6 +68,8 @@ public class ChapterVO implements Serializable {
 	 * 笔记
 	 */
 	List<NodesVO> nodes;
+
+	private Long page;
     public static ChapterVO newInstance(Chapter chapter) {
         if(Objects.isNull( chapter)) {
   	    return null;
