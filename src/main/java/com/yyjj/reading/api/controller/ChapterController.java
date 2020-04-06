@@ -77,7 +77,7 @@ public class ChapterController {
 			//BasePage<Chapter> pages = chapterService.listPage(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId,bookId).orderByAsc(Chapter::getSort));
 			List<Chapter> chapters = chapterService.lambdaQuery().eq(Chapter::getBookId, bookId).orderByAsc(Chapter::getSort).list();
 			if (!CollectionUtils.isEmpty(chapters)) {
-				Long num = (long)0;
+				Long num = (long) 0;
 				for (Chapter chap : chapters) {
 					num++;
 					if (chap.getId().equals(chapterId)) {
@@ -95,47 +95,49 @@ public class ChapterController {
 				vo.setPage(pages.getPage());
 			}
 		}
-		if(Objects.isNull(vo)) {
+		if (Objects.isNull(vo)) {
 			return AjaxResult.failed("没有下一章");
 		}
-
-		//一条新的阅读记录
-		ReadingRecord rr = new ReadingRecord();
-		rr.setUserId(userId);
-		rr.setRedcordTime(LocalDateTime.now());
-		rr.setChapterName(vo.getTitle());
-		Book book = bookService.getById(vo.getBookId());
-		rr.setBookId(vo.getBookId());
-		rr.setBookName(book.getName());
-		rr.setBookAuthor(book.getAuthor());
-		rr.setBookCover(book.getCover());
-		rr.setChapterId(vo.getId());
-		ReadingRecord readingrecord = readingrecordService.lambdaQuery().eq(ReadingRecord::getUserId, userId).eq(ReadingRecord::getBookId, vo.getBookId()).one();
-		//一条新的阅读记录
-		if (Objects.isNull(readingrecord)) {
-			readingrecordService.save(rr);
-		} else {
-			//更新阅读记录
-			readingrecord.setChapterId(vo.getId());
-			readingrecord.setChapterName(vo.getTitle());
-			readingrecord.setRedcordTime(LocalDateTime.now());
-			readingrecordService.updateById(readingrecord);
+		if (userId != 0) {
+			//一条新的阅读记录
+			ReadingRecord rr = new ReadingRecord();
+			rr.setUserId(userId);
+			rr.setRedcordTime(LocalDateTime.now());
+			rr.setChapterName(vo.getTitle());
+			Book book = bookService.getById(vo.getBookId());
+			rr.setBookId(vo.getBookId());
+			rr.setBookName(book.getName());
+			rr.setBookAuthor(book.getAuthor());
+			rr.setBookCover(book.getCover());
+			rr.setChapterId(vo.getId());
+			ReadingRecord readingrecord = readingrecordService.lambdaQuery().eq(ReadingRecord::getUserId, userId).eq(ReadingRecord::getBookId, vo.getBookId()).one();
+			//一条新的阅读记录
+			if (Objects.isNull(readingrecord)) {
+				readingrecordService.save(rr);
+			} else {
+				//更新阅读记录
+				readingrecord.setChapterId(vo.getId());
+				readingrecord.setChapterName(vo.getTitle());
+				readingrecord.setRedcordTime(LocalDateTime.now());
+				readingrecordService.updateById(readingrecord);
+			}
+			Nodes node = nodesService.lambdaQuery().eq(Nodes::getChapterId, vo.getId()).eq(Nodes::getUserId, userId).one();
+			if (Objects.nonNull(node)) {
+				vo.setContent(node.getNodeContent());
+			} else {
+				Nodes nodes = new Nodes();
+				nodes.setChapterId(vo.getId());
+				nodes.setUserId(userId);
+				nodes.setBookId(book.getId());
+				nodes.setNodeContent(vo.getContent());
+				nodesService.save(nodes);
+			}
+			return AjaxResult.success("", vo);
 		}
 
+		return  AjaxResult.success("", vo);
+	}
 
-		Nodes node = nodesService.lambdaQuery().eq(Nodes::getChapterId, vo.getId()).eq(Nodes::getUserId, userId).one();
-		if (Objects.nonNull(node)) {
-			vo.setContent(node.getNodeContent());
-		} else {
-			Nodes nodes = new Nodes();
-			nodes.setChapterId(vo.getId());
-			nodes.setUserId(userId);
-			nodes.setBookId(book.getId());
-			nodes.setNodeContent(vo.getContent());
-			nodesService.save(nodes);
-		}
-		  return AjaxResult.success("", vo);
-		}
 	/**
 	 * 新增章节
 	 * @param vo 必传BookId
