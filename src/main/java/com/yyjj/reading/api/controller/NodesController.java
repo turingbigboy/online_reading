@@ -1,10 +1,14 @@
 package com.yyjj.reading.api.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.yyjj.reading.api.vo.BookVO;
+import com.yyjj.reading.api.vo.ChapterVO;
 import com.yyjj.reading.api.vo.NodesVO;
 import com.yyjj.reading.db.model.Nodes;
 import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.service.BasePage;
+import com.yyjj.reading.service.service.BookService;
+import com.yyjj.reading.service.service.ChapterService;
 import com.yyjj.reading.service.service.NodesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -102,12 +106,18 @@ public class NodesController {
 	public void remove(@PathVariable Integer id) {
 		
 	}
-	
+	@Autowired
+	BookService bookService;
+	@Autowired
+	ChapterService chapterService;
 	private BasePage<NodesVO> convert(BasePage<Nodes> basePage) {
 		List<NodesVO> resultList = new ArrayList<NodesVO>();
 					
 		for (Nodes nodes : basePage.getRecords()) {
-			resultList.add(NodesVO.newInstance(nodes));
+			NodesVO noVO = NodesVO.newInstance(nodes);
+			noVO.setBook(BookVO.newInstance(bookService.getById(noVO.getBookId())));
+			noVO.setChapter(ChapterVO.newInstance(chapterService.getById(noVO.getChapterId())));
+			resultList.add(noVO);
 		}
 		BasePage<NodesVO> result = new BasePage<NodesVO>(basePage.getPage(),
 				basePage.getPageSize(), basePage.getCurrent(), basePage.getTotal(), resultList);
