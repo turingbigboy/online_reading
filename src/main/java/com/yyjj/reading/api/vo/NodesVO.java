@@ -28,12 +28,12 @@ public class NodesVO implements Serializable {
 	 * 书籍id
 	 */
 	private Integer bookId;
-
+	private BookVO book;
 	/**
 	 * 章节id
 	 */
 	private Integer chapterId;
-
+	private ChapterVO chapter;
 	/**
 	 * 笔记起始位置
 	 */
