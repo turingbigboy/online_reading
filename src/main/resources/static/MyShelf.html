@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>我的书架</title>
+    <link rel="stylesheet" href="./css/layui.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="./layui/layui/dist/layui.all.js"></script>
+    <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/axios.js"></script>
+</head>
+<body>
+    <iframe id="frame-content" name="myFrame" MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no
+            src="./layout.html" width="100%" height="600px"></iframe>
+    <div class="main" id="main" onmouseover="returnZindex()" onclick="returnZindex()">
+        <div class="center">
+            <input type="text" id="bookSearch" name="bookSearch" placeholder="请输入书名或作者搜索" autocomplete="off"
+                   class="layui-input search">
+            <span>
+                <button onclick="searchBook()" class="layui-btn layui-btn-primary border-0">
+                <i class="layui-icon layui-icon-search"></i>
+                </button>
+            </span>
+        </div>
+        <div class="main2">
+            <!-- <button onclick="test123()">123</button> -->
+            <!--inner這裡是未有在內部可以y軸滑動-->
+            <div class="inner">
+                <!--books是很多個oneBook   oneBook是一本書的樣子-->
+                <div class="books" id="books"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./js/main/MyShelf.js"></script>
+<style>
+    .main {
+        position: absolute;
+        top: 60px;
+        width: 96%;
+        margin-left: 2%;
+        height: 80%;
+        z-index: -1;
+
+    }
+
+    .main2 {
+        top: 80px;
+        position: absolute;
+        border: 1px solid #dde0e4;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-right: 50px;
+        margin-left: 50px;
+    }
+
+    .inner {
+        height: 100%;
+        width: 100%;
+    }
+
+    .m-2 {
+        margin: 20px;
+    }
+
+    .book-solid {
+        border: 1px solid gray;
+    }
+
+    .oneBook {
+        display: inline-block;
+        width: 180px;
+        height: 200px;
+    }
+
+    /*dotted  虛線*/
+    .dotted {
+        border: 1px dotted gray;
+        cursor: pointer;
+    }
+
+    .large {
+        font-size: 100px;
+        color: gainsboro;
+        line-height: 200px;
+        margin: 25px;
+    }
+</style>
+</html>

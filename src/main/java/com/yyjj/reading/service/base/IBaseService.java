@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
-
 public interface IBaseService<T> extends IService<T> {
 
 	default BasePage<T> listPage(T t) {

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="./css/layui.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="./layui/layui/dist/layui.all.js"></script>
+    <script type="text/javascript" src="./layui/layui/dist/lay/modules/element.js"></script>
+    <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/axios.js"></script>
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <script type="text/javascript" src="./js/wangEditor.min.js"></script>
+</head>
+<body>
+    <iframe id="frame-content" MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no
+            src="./layout.html" width="100%" height="900px"></iframe>
+    <div class="main" id="main">
+        <div>
+            <div class="layui-tab layui-tab-card">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">用戶管理</li>
+                    <li>書籍管理</li>
+                    <li>分类管理</li>
+                </ul>
+                <!--用戶管理-->
+                <div class="layui-tab-content" id="tabContent">
+                    <div class="layui-tab-item layui-show" id="userManager">
+                        <button type="button" class="layui-btn float-right mb-1" onclick="addUser()">新增用戶</button>
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="150">
+                                <col width="200">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr id="uThId">
+                            </tr>
+                            </thead>
+                            <tbody id="uTBodyId">
+                            </tbody>
+                        </table>
+                        <div id="userPage"></div>
+
+                    </div>
+                    <!--用戶管理 end-->
+                    <!--書籍管理-->
+                    <div class="layui-tab-item" id="bookManager">
+                        <button type="button" class="layui-btn float-right mb-1" onclick="uploadBook()">上传书籍</button>
+                        <!-- <button type="button" class="layui-btn float-right mb-1 mr-1" onclick="uploadChapter">新增章节</button> -->
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="150">
+                                <col width="200">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr id="thId">
+                            </tr>
+                            </thead>
+                            <tbody id="tBodyId">
+                            </tbody>
+                        </table>
+                        <div id="tablePage"></div>
+                    </div>
+                    <!--書籍管理 end-->
+                    <!--分类管理-->
+                    <div class="layui-tab-item" id="typeManager">
+                        <button type="button" class="layui-btn mb-1 float-right" onclick="addType()">新增分类</button>
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="150">
+                                <col width="200">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr id="typeThId">
+                            </tr>
+                            </thead>
+                            <tbody id="typeBodyId">
+                            </tbody>
+                        </table>
+                        <div id="typePage"></div>
+                    </div>
+                    <div id="typeHtml"></div>
+                    <!--分类管理 end-->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="./js/main/admin.js"></script>
+<style scoped>
+    .main {
+        position: absolute;
+        top: 60px;
+        width: 90%;
+        margin-left: 2%;
+        height: 80%;
+        z-index: -1;
+    }
+
+    .main2 {
+        top: 80px;
+        position: absolute;
+        border: 1px solid #dde0e4;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .layui-upload-img {
+        width: 92px;
+        height: 92px;
+        margin: 0 10px 10px 0;
+    }
+
+    .small {
+        /*width: 10px !important;*/
+        width: 2%;
+    }
+
+    .middle {
+        width: 10%
+    }
+
+    .layui-table th, .layui-table td {
+        padding: 2px 2px !important;
+    }
+
+    .layui-form-select {
+        width: 190px !important;
+    }
+
+    .chooseImg {
+        position: relative;
+        left: 30%;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+
+    img {
+        position: relative;
+        left: 30%;
+        margin-bottom: 1rem;
+        width: 60px;
+        height: 60px;
+    }
+
+    .table-img {
+        left: 0% !important;
+        max-width: 50px;
+        max-height: 50px;
+    }
+</style>
+</html>

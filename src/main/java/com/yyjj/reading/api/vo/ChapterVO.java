@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-public class ChapterVO implements Serializable {
+public class ChapterVO implements Serializable,Comparable<ChapterVO> {
 
     private static final long serialVersionUID = 1L;
 
@@ -99,5 +99,20 @@ public class ChapterVO implements Serializable {
   	  BeanUtils.copyProperties(this,  chapter);
   	  return  chapter;
   	}
-  	
-  }
+
+	@Override
+	public int compareTo(ChapterVO o) {
+
+    		if(this.sort.equals("") || Objects.isNull(this.sort)){
+    			return -1;
+			}
+    		if(o.getSort().equals("") || Objects.isNull(o.getSort())){
+    			return 1;
+			}
+			Integer sort1 =  Integer.parseInt(this.sort);
+			Integer sort2 = Integer.parseInt(o.getSort());
+
+
+		return sort1.compareTo(sort2);
+	}
+}

@@ -15,7 +15,6 @@ import java.util.Objects;
 @Getter
 @Setter
 public class BookBO implements IBaseBO<Book>{
-
 	/**
 	 * 书籍id
 	 */
@@ -70,8 +69,10 @@ public class BookBO implements IBaseBO<Book>{
 
 	private Integer type ;
 	private String typeName;
+
 	@Override
 	public void accpet(QueryWrapper<Book> queryWrapper) {
+		queryWrapper.lambda().orderByDesc(Book::getCreateTime);
 		if(!StringUtils.isEmpty(typeName)){
 			queryWrapper.lambda().inSql(Book::getId,"select book_id from book_rack GROUP BY book_id  ORDER BY  count(*) DESC");
 		}
@@ -89,4 +90,3 @@ public class BookBO implements IBaseBO<Book>{
   	  return  book;
   	}
 }
-    

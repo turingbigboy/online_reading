@@ -64,9 +64,15 @@ public class BookController {
 		bo.setName(vo.getName());
 		return AjaxResult.success("",bookService.listSearch(new Book(),bo).converterAll(this::convert));
 	}
+
+	/**
+	 * 根据分类查询书籍
+	 * @param bookId
+	 * @return
+	 */
 	@GetMapping("/{bookId:\\d+}/types")
     public AjaxResult bookTypeList(@PathVariable Integer bookId){
-		List<BookType> bookTypes =  bookTypeService.lambdaQuery().eq(BookType::getBookId,bookId).list();
+		List<BookType> bookTypes =  bookTypeService.lambdaQuery().eq(BookType::getBookId,bookId).orderByDesc(BookType::getBookId).list();
 		List<BookTypeVO> bookTypeVOs = new ArrayList<>();
 		for(BookType bt : bookTypes){
 			BookTypeVO vo = BookTypeVO.newInstance(bt);
@@ -132,6 +138,7 @@ public class BookController {
 			vo.setCover(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
 		}
 		Book book = vo.convert();
+
 		Boolean result = bookService.save(book);
 		if(result){
 			return AjaxResult.success("添加成功",bookService.getById(book.getId()));
@@ -185,6 +192,7 @@ public class BookController {
 			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano +file.getOriginalFilename()));
 			vo.setCover(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
 		}
+		System.out.println(vo.toString());
 		Book book = vo.convert();
 		Boolean result = bookService.updateById(book);
 		if(result){

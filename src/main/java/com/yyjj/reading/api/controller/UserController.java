@@ -42,7 +42,8 @@ public class UserController {
 	 */
 	@GetMapping
 	public AjaxResult<BasePage<UserVO>> listBasePage(UserVO vo){
-		return AjaxResult.success("",userService.listPage(new QueryWrapper<User>(vo.convert())).converterAll(this::convert));
+		return AjaxResult.success("",userService.listPage(new QueryWrapper<User>(vo.convert()).lambda().orderByDesc(User::getId)
+		).converterAll(this::convert));
 	}
 
 	/**
@@ -85,7 +86,10 @@ public class UserController {
 		if(Objects.isNull(u)) {
 			return AjaxResult.failed("登陆失败！无此账户");
 		}
-		userService.lambdaQuery().eq(User::getAccount, user.getAccount()).eq(User::getPassword, user.getPassword()).one();
+		userService.lambdaQuery()
+				.eq(User::getAccount, user.getAccount())
+				.eq(User::getPassword, user.getPassword())
+				.one();
 		if(u.getPassword().equals(user.getPassword())) {
 			request.getSession().setAttribute("user", u);
 			return AjaxResult.success("登陆成功！欢迎您"+u.getName(), UserVO.newInstance(u));
@@ -101,12 +105,38 @@ public class UserController {
 	@PostMapping("/register")
 	public AjaxResult<UserVO> register(MultipartFile file, User user) throws IOException {
 
-		User u = userService.lambdaQuery().eq(User::getAccount, user.getAccount()).one();
+        /**
+         * 检查 account 是否为空， 为空则可以注册，否则返回注册失败
+         */
+        //SELECT id,password,identity,icon,name,account FROM user WHERE (account = ?)
+		User u = userService.lambdaQuery()
+				.eq(User::getAccount, user.getAccount())
+				/**
+				 * 如果得到0条则返回null
+				 * 得到1条则返回1条
+				 * 得到多条报TooManyResultsException错
+				 */
+				.one();
+
 		if(Objects.isNull(u)) {
+			/**
+			 * getNano得到LocalDateTime的纳秒数
+			 * 防止图片重名
+			 */
 			int nano = LocalDateTime.now().getNano();
 			if(Objects.nonNull(file)) {
+				/**
+				 * 如果用户上传了头像
+				 * filePath:  E:\Workspaces\idea\reading\src\main\resources\static\
+				 * imagePath: /online_reading/cover
+				 */
+				//将用户上传的头像保存到filePath/cover/nano/file的原名下
 				file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));
+				//保存在数据库中
 				user.setIcon(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
+			}else{
+				//如果用户没有上传头像,设置默认头像
+				user.setIcon(imgPath+File.separator+"cover"+File.separator+"873352700girl.jpg");
 			}
 			userService.save(user);
 		}else {
@@ -116,7 +146,7 @@ public class UserController {
 	}
 
 	/**
-	 * 註銷登錄
+	 * 退出登录
 	 * @param request
 	 * @return
 	 * @throws IOException

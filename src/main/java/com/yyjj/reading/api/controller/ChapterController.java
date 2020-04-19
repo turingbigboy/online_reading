@@ -8,6 +8,7 @@ import com.yyjj.reading.db.model.Nodes;
 import com.yyjj.reading.db.model.ReadingRecord;
 import com.yyjj.reading.domain.context.AjaxResult;
 import com.yyjj.reading.domain.service.BasePage;
+import com.yyjj.reading.domain.service.BasePageVO;
 import com.yyjj.reading.service.service.BookService;
 import com.yyjj.reading.service.service.ChapterService;
 import com.yyjj.reading.service.service.NodesService;
@@ -18,9 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -50,8 +49,12 @@ public class ChapterController {
 	 */
 	@GetMapping("{bookId:\\d+}")
 	public AjaxResult<ChapterVO> listBasePage(@PathVariable Integer bookId, ChapterVO vo){
-		return AjaxResult.success("",chapterService.listPage(new QueryWrapper<Chapter>().lambda()
-				.eq(Chapter::getBookId,bookId).orderByAsc(Chapter::getSort)).converterAll(this::convert));
+		BasePage<ChapterVO> list = chapterService.listPage(new QueryWrapper<Chapter>()
+				.lambda()
+				.eq(Chapter::getBookId,bookId)
+		).converterAll(this::convert);
+		Collections.sort(list.getRecords());
+		return AjaxResult.success("",list);
 	}
 	
 	/**
@@ -75,8 +78,9 @@ public class ChapterController {
 		ChapterVO vo = null;
 		if (chapterId != null) {
 			//BasePage<Chapter> pages = chapterService.listPage(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId,bookId).orderByAsc(Chapter::getSort));
-			List<Chapter> chapters = chapterService.lambdaQuery().eq(Chapter::getBookId, bookId).orderByAsc(Chapter::getSort).list();
+			List<Chapter> chapters = chapterService.lambdaQuery().eq(Chapter::getBookId, bookId).list();
 			if (!CollectionUtils.isEmpty(chapters)) {
+				Collections.sort(chapters);
 				Long num = (long) 0;
 				for (Chapter chap : chapters) {
 					num++;
@@ -87,9 +91,10 @@ public class ChapterController {
 				}
 			}
 		} else {
-			BasePage<Chapter> pages = chapterService.listPage(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId, bookId).orderByAsc(Chapter::getSort));
+			BasePage<Chapter> pages = chapterService.listPage(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId, bookId));
 			List<Chapter> list = pages.getRecords();
 			if (!CollectionUtils.isEmpty(list)) {
+				Collections.sort(list);
 				Chapter chapter1 = list.get(0);
 				vo = convert(chapter1);
 				vo.setPage(pages.getPage());
@@ -179,8 +184,15 @@ public class ChapterController {
 	 */
 	@DeleteMapping("/{id:\\d+}")
 	public AjaxResult remove(@PathVariable Integer id) {
-        nodesService.remove(new QueryWrapper<Nodes>().lambda().eq(Nodes::getChapterId,id));
-        Boolean result = chapterService.removeById(id);
+		/**
+		 * 处理表间关系
+		 * 1.删除 reading_record中的相关记录
+		 */
+        nodesService.remove(new QueryWrapper<Nodes>()
+				.lambda()
+				.eq(Nodes::getChapterId,id));
+
+		Boolean result = chapterService.removeById(id);
 		if(result){
 			return  AjaxResult.success("删除成功");
 		}else {

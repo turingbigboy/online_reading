@@ -49,7 +49,7 @@ public class BookVO implements Serializable {
 	 * 出版时间
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM")
 	private LocalDateTime publicationTime;
 
 	/**
@@ -76,7 +76,7 @@ public class BookVO implements Serializable {
 	 */
 	private Integer type;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM")
 	private LocalDateTime createTime;
      
     public static BookVO newInstance(Book book) {
@@ -108,5 +108,21 @@ public class BookVO implements Serializable {
   	  BeanUtils.copyProperties(this,  book);
   	  return  book;
   	}
-  	
-  }
+
+	@Override
+	public String toString() {
+		return "BookVO{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", author='" + author + '\'' +
+				", publishingHouse='" + publishingHouse + '\'' +
+				", publicationTime=" + publicationTime +
+				", synopsis='" + synopsis + '\'' +
+				", numberWorders=" + numberWorders +
+				", cover='" + cover + '\'' +
+				", status=" + status +
+				", type=" + type +
+				", createTime=" + createTime +
+				'}';
+	}
+}

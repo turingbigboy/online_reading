@@ -2,9 +2,9 @@ spring:
   profiles:
     active:
       - test
-  jmx: 
+  jmx:
     enabled: false
-  jackson: 
+  jackson:
     time-zone: GMT+8
     default-property-inclusion: NON_NULL
   http:
@@ -13,13 +13,13 @@ spring:
       enabled: true
       force: true
   servlet:
-    multipart: 
+    multipart:
       max-file-size: 30MB
       max-request-size: 40MB
   aop:
     auto: true
   resources:
-     static-locations: file:${upload.filePath},classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+    static-locations: file:${upload.filePath},classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
   thymeleaf:
     cache: false
     prefix: classpath:/templates/
@@ -27,9 +27,9 @@ spring:
     mode: HTML5
     encoding: UTF-8
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/online_reading?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&autoReconnect=true
+    url: jdbc:mysql://106.14.14.204:3306/online_reading?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&autoReconnect=true
     username: root
-    password: 123456
+    password: yyjj1314
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8080
@@ -59,5 +59,5 @@ spring:
   profiles: test
 upload:
   filePath:  G:\turing\项目\客服\reading\src\main\resources\static\
-  imagePath: /online_reading/
+  imagePath: /online_reading/cover
 

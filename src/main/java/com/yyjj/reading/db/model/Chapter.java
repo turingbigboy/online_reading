@@ -2,6 +2,7 @@ package com.yyjj.reading.db.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * <p>
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
  * @author yml
  * @since 2020-03-08
  */
-public class Chapter implements Serializable {
+public class Chapter implements Serializable,Comparable<Chapter> {
 
     private static final long serialVersionUID = 1L;
 
@@ -123,5 +124,18 @@ public class Chapter implements Serializable {
             ", content=" + content +
             ", createTime=" + createTime + ", title=" + title +
         "}";
+    }
+
+    @Override
+    public int compareTo(Chapter o) {
+        if(this.sort.equals("") || Objects.isNull(this.sort)){
+            return -1;
+        }
+        if(o.getSort().equals("") || Objects.isNull(o.getSort())){
+            return 1;
+        }
+        Integer sort1 =  Integer.parseInt(this.sort);
+        Integer sort2 = Integer.parseInt(o.getSort());
+        return sort1.compareTo(sort2);
     }
 }
