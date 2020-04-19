@@ -366,6 +366,9 @@ function ajaxRegister(form){
 function readrecords() {
     parent.location.href=ip+"history.html"
 }
+function noderecords(){
+    parent.location.href=ip+"nodeshistory.html"
+}
 function testId(){
     $("#test").toggleClass("blue")
 }

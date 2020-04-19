@@ -47,14 +47,14 @@ function initHistoryTable(historyData) {
     thHtml+='<th>操作</th>'
     $("#thId").html(thHtml);
     for(let item of historyData){
+        var $row2 = JSON.stringify(item).replace(/\"/g,"'");
         tBodyHtml+='<tr>'
         for(let title of Titles){
             if(title.key=="bookCover"){
                 tBodyHtml+='<td><img src="'+item[title.key]+'" class="img-class"></td>'
             }
             else if(title.key=="chapterName"){
-                console.log(12,item)
-                tBodyHtml+='<td><a href="'+ip+"readChapter.html?chapterId="+item.chapterId+'"title="'+item.name+'">'+item[title.key]+'</a></td>'
+                tBodyHtml+='<td><a onclick="checkBookStatus('+$row2+')" title="'+item.name+'">'+item[title.key]+'</a></td>'
             }
             else{
                 tBodyHtml+='<td>'+item[title.key]+'</td>'
@@ -63,12 +63,27 @@ function initHistoryTable(historyData) {
         for(let title of hiddenTitles){
             tBodyHtml+='<td style="display: none">'+item[title.key]+'</td>'
         }
-        var $row = JSON.stringify(item).replace(/\"/g,"'");
-        tBodyHtml+='<td><button type="button" class="layui-btn  mb-1" onclick="readBook('+$row+')">查看</button>'
-        tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteHistory('+$row+')">删除</button>'
+        tBodyHtml+='<td><button type="button" class="layui-btn  mb-1" onclick="readBook('+$row2+')">查看</button>'
+        tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteHistory('+$row2+')">删除</button>'
         tBodyHtml+='</td></tr>'
     }
     $("#tBodyId").html(tBodyHtml)
+}
+// 并新增方法
+//检查书籍状态，是否下架
+function checkBookStatus(item) {
+    let bookMethod={
+        url:ip+"/book/"+item.bookId,
+        method:"GET"
+    }
+    axios(bookMethod).then(data=>{
+        console.log(data.data)
+        if(data.data.data.status==0){
+        alertLayer2("提示","该书已下架")
+    }else{
+        window.location.href=ip+"readChapter.html?chapterId="+item.chapterId;
+    }
+})
 }
 function returnZindex(){
     let dom = document.getElementById("main")

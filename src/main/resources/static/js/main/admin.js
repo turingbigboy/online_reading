@@ -457,7 +457,7 @@ function initBookTable(params) {
         } else {
             tBodyHtml += '<button type="button" class="layui-btn  mb-1" onclick="disableBook(' + $row + ')">下架</button>'
         }
-        tBodyHtml += '<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteBook(' + $row + ')">刪除</button></td>'
+        // tBodyHtml += '<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteBook(' + $row + ')">刪除</button></td>'
         tBodyHtml += '</tr>'
     }
     $("#tBodyId").html(tBodyHtml)
