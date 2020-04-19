@@ -78,7 +78,12 @@ public class ChapterController {
 		ChapterVO vo = null;
 		if (chapterId != null) {
 			//BasePage<Chapter> pages = chapterService.listPage(new QueryWrapper<Chapter>().lambda().eq(Chapter::getBookId,bookId).orderByAsc(Chapter::getSort));
+			Book book = bookService.getById(bookId);
+			if(Objects.isNull(book) || book.getStatus() == 0){
+				return AjaxResult.failed("由于版权原因，书籍一下架");
+			}
 			List<Chapter> chapters = chapterService.lambdaQuery().eq(Chapter::getBookId, bookId).list();
+
 			if (!CollectionUtils.isEmpty(chapters)) {
 				Collections.sort(chapters);
 				Long num = (long) 0;

@@ -1,5 +1,6 @@
 package com.yyjj.reading.api.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.yyjj.reading.api.vo.NodesVO;
 import com.yyjj.reading.db.model.Nodes;
 import com.yyjj.reading.domain.context.AjaxResult;
@@ -71,7 +72,17 @@ public class NodesController {
 		}
 		//return null;
 	}
-	
+
+	/**
+	 * 获取用户笔记记录
+	 * @param userId
+	 * @return
+	 */
+	@GetMapping("/user/{userId:\\d+}")
+	public AjaxResult userNodes(@PathVariable Integer userId){
+		return AjaxResult.success("",nodesService.listPage(Wrappers.<Nodes>lambdaQuery().eq(Nodes::getUserId,userId)).converterAll(this::convert));
+	}
+
 	/**
 	 * Nodes
 	 * @param vo
