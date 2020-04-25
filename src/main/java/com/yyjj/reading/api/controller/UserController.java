@@ -8,6 +8,7 @@ import com.yyjj.reading.domain.service.BasePage;
 import com.yyjj.reading.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -165,6 +166,10 @@ public class UserController {
 	 */
 	@PostMapping
 	public AjaxResult<UserVO> add(MultipartFile file, User user) throws IOException {
+		List<User> u = userService.lambdaQuery().eq(User::getAccount,user.getAccount()).list();
+		if(! CollectionUtils.isEmpty(u)){
+			return AjaxResult.failed("账户名重复！请重新输入");
+		}
 		int nano = LocalDateTime.now().getNano();
 		if(Objects.nonNull(file)) {
 			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));
@@ -179,13 +184,17 @@ public class UserController {
 	}
 
 	/**
-	 * 编辑用户
+	 * 前台编辑用户
 	 * @param vo
 	 * @return
 	 *
 	 */
 	@PutMapping
-	public AjaxResult<UserVO> modify(MultipartFile file,UserVO vo) throws IOException {
+	public AjaxResult<UserVO> modify(MultipartFile file,UserVO vo,HttpServletRequest request) throws IOException {
+		List<User> u = userService.lambdaQuery().eq(User::getAccount,vo.getAccount()).list();
+		if(! CollectionUtils.isEmpty(u)){
+			return AjaxResult.failed("账户名重复！请重新输入");
+		}
 		int nano = LocalDateTime.now().getNano();
 		if(Objects.nonNull(file)) {
 			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));
@@ -193,12 +202,38 @@ public class UserController {
 		}
 		boolean result = userService.updateById(vo.convert());
 		if(result) {
+			request.getSession().setAttribute("user", null);
 			return AjaxResult.success("修改成功", UserVO.newInstance(userService.getById(vo.getId())));
 		}else {
 			return AjaxResult.failed("修改失败");
 		}
 	}
 
+	/**
+	 * 后台编辑用户
+	 * @param vo
+	 * @return
+	 *
+	 */
+	@PutMapping("/admin")
+	public AjaxResult<UserVO> adminModify(MultipartFile file,UserVO vo) throws IOException {
+		List<User> u = userService.lambdaQuery().eq(User::getAccount,vo.getAccount()).list();
+		if(! CollectionUtils.isEmpty(u)){
+			return AjaxResult.failed("账户名重复！请重新输入");
+		}
+		int nano = LocalDateTime.now().getNano();
+		if(Objects.nonNull(file)) {
+			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));
+			vo.setIcon(imgPath+File.separator+"cover"+File.separator+nano+file.getOriginalFilename());
+		}
+		boolean result = userService.updateById(vo.convert());
+		if(result) {
+
+			return AjaxResult.success("修改成功", UserVO.newInstance(userService.getById(vo.getId())));
+		}else {
+			return AjaxResult.failed("修改失败");
+		}
+	}
 	/**
 	 * 删除用户
 	 * @param id

@@ -132,6 +132,9 @@ public class BookController {
 	 */
 	@PostMapping
 	public AjaxResult<BookVO> add(MultipartFile file,BookVO vo) throws IOException {
+		if(vo.getPublicationTime().compareTo(LocalDateTime.now()) > 0 ){
+			return AjaxResult.failed("出版时间不能大于当前时间！");
+		}
 			int nano = LocalDateTime.now().getNano();
 		if(Objects.nonNull(file)) {
 			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano+file.getOriginalFilename()));

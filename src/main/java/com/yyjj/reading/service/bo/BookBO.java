@@ -80,7 +80,7 @@ public class BookBO implements IBaseBO<Book>{
 			queryWrapper.lambda().inSql(Book::getId," select book_id from book_type where type_id = " +type);
 		}
 		if(Objects.nonNull(name)){
-			queryWrapper.lambda().like(Book::getName,name);
+			queryWrapper.lambda().like(Book::getName,name).or().like(Book::getAuthor,name);
 		}
 	}
 	
