@@ -190,6 +190,10 @@ public class BookController {
 	 */
 	@PutMapping
 	public AjaxResult modify(MultipartFile file,BookVO vo) throws IOException {
+		if(vo.getPublicationTime().compareTo(LocalDateTime.now()) > 0 ){
+			return AjaxResult.failed("出版时间不能大于当前时间！");
+		}
+
 		if(Objects.nonNull(file)) {
 			int nano = LocalDateTime.now().getNano();
 			file.transferTo(new File(filePath+ File.separator+"cover"+File.separator+nano +file.getOriginalFilename()));
