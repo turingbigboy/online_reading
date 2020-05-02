@@ -191,7 +191,7 @@ public class UserController {
 	 */
 	@PutMapping
 	public AjaxResult<UserVO> modify(MultipartFile file,UserVO vo,HttpServletRequest request) throws IOException {
-		List<User> u = userService.lambdaQuery().eq(User::getAccount,vo.getAccount()).list();
+		List<User> u = userService.lambdaQuery().eq(User::getAccount,vo.getAccount()).ne(User::getId,vo.getId()).list();
 		if(! CollectionUtils.isEmpty(u)){
 			return AjaxResult.failed("账户名重复！请重新输入");
 		}
