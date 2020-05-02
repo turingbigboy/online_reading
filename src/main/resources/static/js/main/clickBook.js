@@ -166,7 +166,8 @@ function pjChapters(allChapterMenu) {
         for(let i=0;i<allChapterMenu.length;i++){
             let item =allChapterMenu[i]
             var $row = JSON.stringify(item).replace(/\"/g,"'");
-            nHtml+='<li onclick="readBook2('+$row+')" class="chapter-li">第'+item.sort+'章<span style="margin-left: 25%">'
+            let id = item.id
+            nHtml+='<li  onclick="readBook2('+id+')" class="chapter-li">第'+item.sort+'章<span style="margin-left: 25%">'
                 +item.title+'</span></li>'
         }
     }
@@ -215,8 +216,8 @@ function readBook() {
         window.location.href = ip+"readChapter.html?chapterId="+chapters[0].id
     }
 }
-function readBook2(row) {
-    window.location.href = ip+"readChapter.html?chapterId="+row.id
+function readBook2(id) {
+    window.location.href = ip+"readChapter.html?chapterId="+id
 }
 function addShelf(){
     if(!sessionStorage.getItem("userId")){

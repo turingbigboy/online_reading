@@ -26,9 +26,9 @@ function initUserImg() {
         axios(userInfo).then(data=>{
             userData = data.data.data
             let row = data.data.data;
-            let dom = document.getElementById("userImg");
-            dom.src=row.icon;
-        })
+        let dom = document.getElementById("userImg");
+        dom.src=row.icon;
+    })
     }
 
 
@@ -60,7 +60,7 @@ function realLogout(){
         // alertLayer("","退出成功",successLogout);
         alertLayer("提示","退出成功",successLogout);
 
-    })
+})
 }
 
 //用户是否登录  status：0.未登录  1.已登陆
@@ -88,26 +88,26 @@ function checkAdmin() {
     }
     axios(checkAdminMethod).then(data=>{
         if(data.data.data){
-            let s = document.getElementById("houtai")
-            s.style.display = ""
-        }else{
-            let s = document.getElementById("houtai")
-            s.style.display = "none"
+        let s = document.getElementById("houtai")
+        s.style.display = ""
+    }else{
+        let s = document.getElementById("houtai")
+        s.style.display = "none"
+    }
+    if (data.data.code==403){
+        let logoutMethod={
+            url:ip+"user/logout",
+            method:"GET",
+            params:""
         }
-        if (data.data.code==403){
-            let logoutMethod={
-                url:ip+"user/logout",
-                method:"GET",
-                params:""
-            }
-            axios(logoutMethod).then(()=>{
-                // alertLayer("","退出成功",successLogout);
-                // alertLayer("提示","退出成功",successLogout);
-                parentListen();
-            })
-            alertLayer("提示",data.data.msg,closeForm2)
-        }
+        axios(logoutMethod).then(()=>{
+            // alertLayer("","退出成功",successLogout);
+            // alertLayer("提示","退出成功",successLogout);
+            parentListen();
     })
+        alertLayer("提示",data.data.msg,closeForm2)
+    }
+})
 }
 function closeForm2() {
     sessionStorage.clear();
@@ -183,12 +183,12 @@ function pjUser() {
     nHtml+='</div>'
     nHtml+='</div>'
 
-    nHtml+='<div class="layui-form-item">'
-    nHtml+='<label class="layui-form-label">身份</label>'
-    nHtml+='<div class="layui-input-inline">'
-    nHtml+='<input type="number" name="identity" id="identity" placeholder="请输入身份" autocomplete="off" class="layui-input">'
-    nHtml+='</div>'
-    nHtml+='</div>'
+    // nHtml+='<div class="layui-form-item">'
+    // nHtml+='<label class="layui-form-label">身份</label>'
+    // nHtml+='<div class="layui-input-inline">'
+    // nHtml+='<input type="number" name="identity" id="identity" placeholder="请输入身份" autocomplete="off" class="layui-input">'
+    // nHtml+='</div>'
+    // nHtml+='</div>'
     return nHtml;
 }
 function clickLogin(){
@@ -204,7 +204,7 @@ function  clickRegister() {
         password:"",
         account:"",
         icon:"",
-        identity:""
+        // identity:""
     }
     let html = pjUser();
     alertcomfirm4("RegiaterLayer","注册",html,"RegiaterVerify",null,validateAddUser,ajaxAddUser,rowList,getUserData)
@@ -217,9 +217,9 @@ function updateUser() {
 function validateAddUser(form) {
     var form = layui.form;
     form.verify({
-        identity:function (value) {
-            if(typeof value !== "number"){
-                return "身份必须是数字"
+        account:function (value) {
+            if( value === ""||value===undefined){
+                return "账号不能为空"
             }
         }
     });
@@ -238,7 +238,7 @@ function getUserData(rowList) {
     if(rowList.icon){
         document.getElementById('img').src=rowList.icon;
     }
-    document.getElementById("identity").value=rowList.identity;
+    // document.getElementById("identity").value=rowList.identity;
 
 }
 function ajaxAddUser(form) {
@@ -261,11 +261,11 @@ function ajaxAddUser(form) {
     axios(addUser).then((data)=>{
 
         if(data.data.code!=0||data.data.code!=200){
-            alertLayer2("编辑用户",data.data.msg)
-        }else{
-            alertLayer("编辑用户","新增成功",closeForm);
-        }
-    }).catch(err=>{alertLayer2("编辑用户",err)})
+        alertLayer2("编辑用户",data.data.msg)
+    }else{
+        alertLayer("编辑用户","新增成功",closeForm);
+    }
+}).catch(err=>{alertLayer2("编辑用户",err)})
 }
 function ajaxUpdateUser(form) {
     let data = new FormData();
@@ -284,10 +284,15 @@ function ajaxUpdateUser(form) {
         method:"put",
         data:data
     }
-    axios(updateUser).then(()=>{
-        alertLayer("编辑用户","修改成功",closeForm);
-    }).catch(err=>{alertLayer2("编辑用户",err)})
+    axios(updateUser).then((data)=>{
+        if(data.data.code!==0){
+        alertLayer2("编辑用户",data.data.msg);
+    }else{
+        alertLayer("编辑用户",data.data.msg,logout);
+    }
+}).catch(err=>{alertLayer2("编辑用户",err)})
 }
+
 function closeForm() {
     layer.closeAll();
     init();
@@ -305,17 +310,17 @@ function ajaxLogin(data){
     }
     axios(login).then((data)=>{
         if(data.data.code==0||data.data.code=="0"){
-            sessionStorage.setItem("userId", data.data.data.id);
-            alertLayer("登录","登录成功",successLogin);
+        sessionStorage.setItem("userId", data.data.data.id);
+        alertLayer("登录","登录成功",successLogin);
 
-            // returnParentListen();
-        }else{
-            alertLayer2("登录",data.data.msg)
-        }
+        // returnParentListen();
+    }else{
+        alertLayer2("登录",data.data.msg)
+    }
 
-        // layer.closeAll()
-        // ifLogin()
-    }).catch(err=>{alertLayer2("登录",err)})
+    // layer.closeAll()
+    // ifLogin()
+}).catch(err=>{alertLayer2("登录",err)})
     //如果成功，將status寫入session
     // sessionStorage.setItem("status", 1);
 
@@ -359,7 +364,7 @@ function ajaxRegister(form){
         }
         axios(register).then(()=>{
             alertLayer("注册","注册成功",closeForm);
-        }).catch(err=>{alertLayer("注册","注册失败",closeForm)})
+    }).catch(err=>{alertLayer("注册","注册失败",closeForm)})
 
     }
 }

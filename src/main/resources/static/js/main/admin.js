@@ -573,13 +573,17 @@ function ajaxUpdateUser(form) {
 
     }
     let updateUser = {
-        url: ip + "user/",
+        url: ip + "user/admin",
         method: "put",
         data: data
     }
-    axios(updateUser).then(() => {
-        alertLayer("编辑用户", "修改成功", closeForm
-)
+    axios(updateUser).then((data) => {
+        if(data.data.code!==0){
+        alertLayer2("编辑用户", data.data.msg)
+    }else{
+        alertLayer("编辑用户", data.data.msg,closeForm)
+    }
+
     ;
 }).
     catch(err => {alertLayer2("编辑用户", err
@@ -1005,8 +1009,11 @@ function ajaxAddBook(form) {
         data: data
     }
     axios(addBook).then(res => {
-        alertLayer("编辑书籍", "新增成功", closeForm
-)
+    if(res.data.code!==0){
+        alertLayer2("编辑书籍", res.data.msg)
+    }else{
+        alertLayer("编辑书籍", res.data.mag, closeForm)
+    }
     ;
 }).
     catch(err => {alertLayer2("编辑书籍", err
@@ -1149,14 +1156,14 @@ function ajaxAddBookType(form) {
             method: "POST",
             data: form
         }
-        axios(addBookType).then(() => {
-            alertLayer("编辑书籍类型", "编辑成功", closeForm
-    )
-        ;
-    }).
+        axios(addBookType).then((data) => {
+            alertLayer("编辑书籍类型", data.data.msg, closeForm)
+
+            ;
+        }).
         catch(err => {alertLayer2("编辑用户", err
-    )
-    })
+        )
+        })
     }
 }
 
@@ -1193,9 +1200,12 @@ function ajaxAddType(form) {
         method: "POST",
         data: form
     }
-    axios(addUser).then(() => {
-        alertLayer("新增类型", "新增成功", closeForm
-)
+    axios(addUser).then((data) => {
+    if(data.data.code!==0){
+        alertLayer2("新增类型", data.data.msg)
+    }else{
+        alertLayer("新增类型", data.data.msg, closeForm)
+    }
     ;
 }).
     catch(err => {alertLayer2("新增类型", err
@@ -1209,9 +1219,13 @@ function ajaxUpdateType(form) {
         method: "PUT",
         data: form
     }
-    axios(addUser).then(() => {
-        alertLayer("修改类型", "修改成功", closeForm
-)
+    axios(addUser).then((data) => {
+        if(data.data.code!==0){
+        alertLayer2("修改类型", data.data.msg)
+    }else{
+        alertLayer("修改类型", data.data.msg, closeForm)
+    }
+
     ;
 }).
     catch(err => {alertLayer2("修改类型", err
@@ -1268,8 +1282,13 @@ function ajaxUpdateBook(form) {
         method: "PUT",
         data: data
     }
-    axios(updateBook).then(() => {
+    axios(updateBook).then((data) => {
+        if(data.data.code!==0){
+        alertLayer2("修改书籍", data.data.msg);
+    }else{
         alertLayer("修改书籍", "修改成功", closeForm);
+    }
+
 }).catch(err => alertLayer2("修改书籍", err)
 )
 }
