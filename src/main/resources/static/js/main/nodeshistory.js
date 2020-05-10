@@ -60,34 +60,34 @@ function initNodesTable(nodesData) {
     thHtml+='<th>操作</th>'
     $("#thId").html(thHtml);
     for(let item of nodesData){
-        var $row2 = JSON.stringify(item).replace(/\"/g,"'");
-        tBodyHtml+='<tr>'
-        for(let title of Titles){
-            if(title.key==="cover"){
-                tBodyHtml+='<td><img src="'+item.book.cover+'" class="img-class"></td>'
-            }
-            else if(title.key==="chapter.title"){
-                console.log(12,item)
-                tBodyHtml+='<td><a onclick="checkBookStatus('+$row2+')" title="'+item.chapter.title+'">'+item.chapter.title+'</a></td>'
-            }
-            else if (title.key==="num"){
-                tBodyHtml+='<td>'+item.num+'</td>'
-            }else{
-                tBodyHtml+='<td>'+item.book[title.key]+'</td>'
+        if(item.num>0) {
+            var $row2 = JSON.stringify(item).replace(/\"/g, "'");
+            tBodyHtml += '<tr>'
+            for (let title of Titles) {
+                if (title.key === "cover") {
+                    tBodyHtml += '<td><img src="' + item.book.cover + '" class="img-class"></td>'
+                } else if (title.key === "chapter.title") {
+                    console.log(12, item)
+                    tBodyHtml += '<td><a onclick="checkBookStatus(' + $row2 + ')" title="' + item.chapter.title + '">' + item.chapter.title + '</a></td>'
+                } else if (title.key === "num") {
+                    tBodyHtml += '<td>' + item.num + '</td>'
+                } else {
+                    tBodyHtml += '<td>' + item.book[title.key] + '</td>'
 
+                }
             }
-        }
-        for(let title of hiddenTitles){
-            if(title.key==="chapter.id"){
-                tBodyHtml+='<td style="display: none">'+item.chapter.id+'</td>'
-            }else {
-                tBodyHtml+='<td style="display: none">'+item[title.key]+'</td>'
+            for (let title of hiddenTitles) {
+                if (title.key === "chapter.id") {
+                    tBodyHtml += '<td style="display: none">' + item.chapter.id + '</td>'
+                } else {
+                    tBodyHtml += '<td style="display: none">' + item[title.key] + '</td>'
+                }
             }
+            var $row = JSON.stringify(item).replace(/\"/g, "'");
+            tBodyHtml += '<td><button type="button" class="layui-btn  mb-1" onclick="readBook(' + $row + ')">查看</button>'
+            tBodyHtml += '<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteHistory(' + $row + ')">删除</button>'
+            tBodyHtml += '</td></tr>'
         }
-        var $row = JSON.stringify(item).replace(/\"/g,"'");
-        tBodyHtml+='<td><button type="button" class="layui-btn  mb-1" onclick="readBook('+$row+')">查看</button>'
-        tBodyHtml+='<button type="button" class="layui-btn layui-btn-danger  mb-1" onclick="deleteHistory('+$row+')">删除</button>'
-        tBodyHtml+='</td></tr>'
     }
     $("#tBodyId").html(tBodyHtml)
 }

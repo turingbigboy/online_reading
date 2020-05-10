@@ -1184,9 +1184,13 @@ function ajaxAddUser(form) {
         method: "POST",
         data: data
     }
-    axios(addUser).then(() => {
-        alertLayer("编辑用户", "新增成功", closeForm
-)
+    axios(addUser).then((data) => {
+        if(data.data.code!==0){
+            alertLayer2("修改类型", data.data.msg)
+        }else{
+            alertLayer("修改类型", data.data.msg, closeForm)
+        }
+
     ;
 }).
     catch(err => {alertLayer2("编辑用户", err

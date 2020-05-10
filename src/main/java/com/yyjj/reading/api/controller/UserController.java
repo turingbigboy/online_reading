@@ -69,7 +69,7 @@ public class UserController {
 			return AjaxResult.failed("请登录");
 		}else {
 			User u = (User) attribute;
-			if(u.getIdentity()==2) {
+			if(Objects.nonNull(u.getIdentity()) && u.getIdentity()==2) {
 				return AjaxResult.success("", true);
 			}else {
 				return AjaxResult.success("", false);
